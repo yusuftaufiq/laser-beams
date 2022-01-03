@@ -10,14 +10,11 @@
 
 declare(strict_types=1);
 
-use App\Controller\IndexController;
-use Swoole\Http\Request;
-use Swoole\Http\Response;
+use App\Controllers\IndexController;
+use App\Controllers\TodoItemController;
 
 return [
     ['GET', '/', IndexController::class . '@' . 'index'],
-    ['GET', '/hello[/{name}]', IndexController::class  . '@' . 'hello'],
-    ['GET', '/favicon.ico', function (Request $request, Response $response) {
-        $response->end();
-    }],
+    ['GET', '/todo-items', TodoItemController::class  . '@' . 'index'],
+    ['GET', '/todo-items/[{id:\d+}]', TodoItemController::class  . '@' . 'show'],
 ];
