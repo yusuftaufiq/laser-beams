@@ -9,8 +9,6 @@ declare(strict_types=1);
  * @license  https://github.com/simple-swoole/simps/blob/master/LICENSE
  */
 
-xdebug_info();
-
 return [
     'mode' => SWOOLE_PROCESS,
     'http' => [
