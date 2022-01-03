@@ -1,0 +1,256 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "2f6d86678321bb2a2150bd3f2ce1aff1",
+    "packages": [
+        {
+            "name": "nikic/fast-route",
+            "version": "v1.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/FastRoute.git",
+                "reference": "181d480e08d9476e61381e04a71b34dc0432e812"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/FastRoute/zipball/181d480e08d9476e61381e04a71b34dc0432e812",
+                "reference": "181d480e08d9476e61381e04a71b34dc0432e812",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.8.35|~5.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FastRoute\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov",
+                    "email": "nikic@php.net"
+                }
+            ],
+            "description": "Fast request router for PHP",
+            "keywords": [
+                "router",
+                "routing"
+            ],
+            "support": {
+                "issues": "https://github.com/nikic/FastRoute/issues",
+                "source": "https://github.com/nikic/FastRoute/tree/master"
+            },
+            "time": "2018-02-13T20:26:39+00:00"
+        },
+        {
+            "name": "simple-swoole/db",
+            "version": "v1.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simple-swoole/db.git",
+                "reference": "b08364734955c809ca718094c6b4b42bf0e79af7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simple-swoole/db/zipball/b08364734955c809ca718094c6b4b42bf0e79af7",
+                "reference": "b08364734955c809ca718094c6b4b42bf0e79af7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-swoole": ">=4.4",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.9"
+            },
+            "suggest": {
+                "swoole/library": "Required to use database, and the swoole version is less than 4.4.17"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Simps\\DB\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Luffy",
+                    "email": "52o@qq52o.cn"
+                }
+            ],
+            "description": "A db component for Simps.",
+            "keywords": [
+                "Simple",
+                "coroutine",
+                "db",
+                "php",
+                "simps",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/simple-swoole/db/issues",
+                "source": "https://github.com/simple-swoole/db/tree/v1.0.7"
+            },
+            "funding": [
+                {
+                    "url": "https://simps.io/#/zh-cn/donate",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/simple-swoole",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/simps",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2021-05-20T08:39:05+00:00"
+        },
+        {
+            "name": "simple-swoole/simps",
+            "version": "v1.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/simple-swoole/simps.git",
+                "reference": "0a2b98f67a56159fb244cdeabb041036bfd2e90e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/simple-swoole/simps/zipball/0a2b98f67a56159fb244cdeabb041036bfd2e90e",
+                "reference": "0a2b98f67a56159fb244cdeabb041036bfd2e90e",
+                "shasum": ""
+            },
+            "require": {
+                "ext-swoole": ">=4.4",
+                "nikic/fast-route": "^1.3",
+                "php": ">=7.1"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^2.9"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Simps\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Luffy",
+                    "email": "52o@qq52o.cn"
+                }
+            ],
+            "description": "A simple, lightweight and high-performance PHP coroutine framework.",
+            "keywords": [
+                "Simple",
+                "coroutine",
+                "php",
+                "simps",
+                "swoole"
+            ],
+            "support": {
+                "issues": "https://github.com/simple-swoole/simps/issues",
+                "source": "https://github.com/simple-swoole/simps/tree/v1.0.5"
+            },
+            "funding": [
+                {
+                    "url": "https://simps.io/#/zh-cn/donate",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/simple-swoole",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/simps",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2020-10-15T02:00:27+00:00"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "swoole/ide-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/swoole/ide-helper.git",
+                "reference": "d03c707d4dc803228e93b4884c72949c4d28e8b8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/swoole/ide-helper/zipball/d03c707d4dc803228e93b4884c72949c4d28e8b8",
+                "reference": "d03c707d4dc803228e93b4884c72949c4d28e8b8",
+                "shasum": ""
+            },
+            "default-branch": true,
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Apache-2.0"
+            ],
+            "authors": [
+                {
+                    "name": "Team Swoole",
+                    "email": "team@swoole.com"
+                }
+            ],
+            "description": "IDE help files for Swoole.",
+            "support": {
+                "issues": "https://github.com/swoole/ide-helper/issues",
+                "source": "https://github.com/swoole/ide-helper/tree/4.8.5"
+            },
+            "funding": [
+                {
+                    "url": "https://gitee.com/swoole/swoole?donate=true",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/swoole",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-12-24T22:44:20+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "swoole/ide-helper": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.1",
+        "ext-swoole": ">=4.4"
+    },
+    "platform-dev": [],
+    "plugin-api-version": "2.1.0"
+}
