@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Helpers\ResponseHelper;
+use App\Helpers\TodoItemValidator;
 use App\Model\TodoItem;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -48,5 +50,29 @@ final class TodoItemController
 
         $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success($item));
+    }
+
+    final public function store(Request $request, Response $response): void
+    {
+        $violation = TodoItemValidator::validateStore($request->post);
+
+        if ($violation !== false) {
+            $response->setStatusCode(ResponseHelper::HTTP_BAD_REQUEST);
+            $response->end(ResponseHelper::badRequest($violation));
+        }
+
+        $todo = new TodoItem();
+
+        $request->post['is_active'] = match (array_key_exists('is_active', $request->post)) {
+            true => (bool) $request->post['is_active'],
+            default => true,
+        };
+
+        $id = $todo->add($request->post);
+        $item = $todo->find($id);
+
+        $response->setStatusCode(ResponseHelper::HTTP_OK);
+        $response->end(ResponseHelper::success($item));
+        // $response->end(ResponseHelper::success(['id' => $id] + $request->post));
     }
 }
