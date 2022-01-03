@@ -1,0 +1,13 @@
+version: "3.8"
+
+services:
+  app:
+    image: yt2951/laser-beams:latest
+    ports:
+      - 8888:9501
+    working_dir: /var/www/html/laser-beams
+    volumes:
+      - ./:/var/www/html/laser-beams
+    environment:
+      AUTORELOAD_PROGRAMS: "swoole"
+      AUTORELOAD_ANY_FILES: 1
