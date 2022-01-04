@@ -117,7 +117,7 @@ final class TodoItemController
         $item = $todo->find($id);
         $item['is_active'] = (bool) $item['is_active'];
 
-        $response->setStatusCode(ResponseHelper::HTTP_CREATED);
+        $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success($item));
     }
 
