@@ -12,58 +12,40 @@ declare(strict_types=1);
 
 namespace App\Model;
 
-use Simps\DB\BaseModel;
-
-final class TodoItem extends BaseModel
+final class TodoItem extends Model
 {
-    final public const TABLE = 'todos';
+    final public const TABLE_NAME = 'todos';
 
-    final public function all(): array
+    final public function getTableName(): string
     {
-        return $this->select(self::TABLE, [
+        return self::TABLE_NAME;
+    }
+
+    final public function all(mixed $value = null, string $column = null): ?array
+    {
+        return $this->select($this->getTableName(), [
             'id',
-            'email',
             'title',
+            'activity_group_id',
+            'is_active',
+            'priority',
             'created_at',
             'updated_at',
             'deleted_at',
-        ], ['deleted_at[!]' => null]) ?: [];
+        ], array_merge(['deleted_at' => null], $value !== null ? [$column => $value] : []));
     }
 
-    final public function find(mixed $value, string $column = 'id'): array|false
+    final public function find(int $id): ?array
     {
-        if (!$this->has(self::TABLE, [$column => $value])) {
-            return false;
-        }
-
-        return $this->get(self::TABLE, [
+        return $this->get($this->getTableName(), [
             'id',
-            'email',
             'title',
+            'activity_group_id',
+            'is_active',
+            'priority',
             'created_at',
             'updated_at',
             'deleted_at',
-        ], [$column => $value, 'deleted_at[!]' => null]);
-    }
-
-    final public function add(array $values): int
-    {
-        $item = $this->insert(self::TABLE, $values);
-
-        return $item->id();
-    }
-
-    final public function change(int $id, array $values): int
-    {
-        return $this->update(self::TABLE, $values, [
-            'id' => $id,
-        ])->rowCount();
-    }
-
-    final public function remove(int $id): int
-    {
-        return $this->change($id, [
-            'deleted_at' => $this->raw('now()'),
-        ]);
+        ], ['id' => $id, 'deleted_at' => null]);
     }
 }
