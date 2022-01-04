@@ -29,7 +29,7 @@ final class ActivityController
     {
         $activity = new Activity();
 
-        $tasks = $activity->all();
+        $tasks = $activity->all() ?: [];
 
         $response->setHeader('Content-Type', 'application/json');
         $response->setStatusCode(ResponseHelper::HTTP_OK);
