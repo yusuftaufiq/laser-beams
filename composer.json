@@ -28,6 +28,7 @@
         "optimize-autoloader": true
     },
     "require-dev": {
-        "swoole/ide-helper": "@dev"
+        "swoole/ide-helper": "@dev",
+        "vimeo/psalm": "^4.17"
     }
 }
