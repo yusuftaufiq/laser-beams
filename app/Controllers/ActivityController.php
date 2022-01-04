@@ -13,7 +13,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
-use App\Model\Activity;
+use App\Models\Activity;
 use App\Validators\ActivityValidator;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
