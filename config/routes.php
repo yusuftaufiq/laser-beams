@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use App\Controllers\ActivityController;
 use App\Controllers\IndexController;
 use App\Controllers\TodoItemController;
 
@@ -20,4 +21,9 @@ return [
     ['POST', '/todo-items', TodoItemController::class  . '@' . 'store'],
     ['PATCH', '/todo-items/{id:\d+}', TodoItemController::class  . '@' . 'update'],
     ['DELETE', '/todo-items/{id:\d+}', TodoItemController::class  . '@' . 'destroy'],
+    ['GET', '/activity-groups', ActivityController::class  . '@' . 'index'],
+    ['GET', '/activity-groups/{id:\d+}', ActivityController::class  . '@' . 'show'],
+    ['POST', '/activity-groups', ActivityController::class  . '@' . 'store'],
+    ['PATCH', '/activity-groups/{id:\d+}', ActivityController::class  . '@' . 'update'],
+    ['DELETE', '/activity-groups/{id:\d+}', ActivityController::class  . '@' . 'destroy'],
 ];
