@@ -21,10 +21,6 @@ final class IndexController
     final public function index(Request $request, Response $response): void
     {
         $response->setStatusCode(ResponseHelper::HTTP_OK);
-        $response->end(json_encode([
-            'status' => 'Success',
-            'message' => 'Created',
-            'data' => 'Hello world!',
-        ]));
+        $response->end(ResponseHelper::success('Hello world!'));
     }
 }
