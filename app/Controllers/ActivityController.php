@@ -36,9 +36,9 @@ final class ActivityController
         // $result = $this->cache($request, function () {
         //     $activity = new Activity();
 
-        //     return ResponseHelper::format('Success', 'OK', ($activity->all() ?: []));
+            // return ResponseHelper::format('Success', 'OK', $activity->all());
         // });
-        $result = ResponseHelper::format('Success', 'OK', ($activity->all()));
+        $result = ResponseHelper::format('Success', 'OK', $activity->all());
 
         return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
@@ -153,6 +153,7 @@ final class ActivityController
         }
 
         $affectedRowsCount = $activity->remove($id);
+
         $result = ResponseHelper::format('Success', 'OK');
 
         return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
