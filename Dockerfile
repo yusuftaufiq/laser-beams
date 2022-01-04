@@ -3,6 +3,9 @@ FROM phpswoole/swoole:4.8.5-php8.1
 # Install packages
 RUN apt update && apt install -y inotify-tools --no-install-recommends
 
+# Install PDO MySQL
+RUN docker-php-ext-install mysqli pdo_mysql
+
 # Use this when in production mode
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
