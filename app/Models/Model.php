@@ -23,14 +23,14 @@ abstract class Model extends BaseModel
 
     abstract public function getColumns(): array;
 
-    public function all(mixed $value = null, string $column = null): ?array
+    public function all(mixed $value = null, string $column = null): array
     {
         return $this->select(
             $this->getTableName(),
             $this->getColumns(),
-            ['deleted_at' => null] + ($value !== null ? [$column => $value] : [])
+            ['deleted_at' => null] + ($value !== null && $column !== null ? [$column => $value] : [])
             // $value !== null ? [$column => $value] : []
-        );
+        ) ?: [];
     }
 
     public function own(int $id): bool
@@ -45,7 +45,7 @@ abstract class Model extends BaseModel
             $this->getColumns(),
             ['id' => $id, 'deleted_at' => null]
             // ['id' => $id]
-        );
+        ) ?: null;
     }
 
     public function add(array $values): int
