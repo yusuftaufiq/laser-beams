@@ -16,5 +16,8 @@ use App\Controllers\TodoItemController;
 return [
     ['GET', '/', IndexController::class . '@' . 'index'],
     ['GET', '/todo-items', TodoItemController::class  . '@' . 'index'],
-    ['GET', '/todo-items/[{id:\d+}]', TodoItemController::class  . '@' . 'show'],
+    ['GET', '/todo-items/{id:\d+}', TodoItemController::class  . '@' . 'show'],
+    ['POST', '/todo-items', TodoItemController::class  . '@' . 'store'],
+    ['PATCH', '/todo-items/{id:\d+}', TodoItemController::class  . '@' . 'update'],
+    ['DELETE', '/todo-items/{id:\d+}', TodoItemController::class  . '@' . 'destroy'],
 ];
