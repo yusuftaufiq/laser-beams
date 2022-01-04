@@ -14,6 +14,9 @@ namespace App\Models;
 
 use Simps\DB\BaseModel;
 
+/**
+ * TODO: Remove deleted_at?
+ */
 abstract class Model extends BaseModel
 {
     abstract public function getTableName(): string;
@@ -26,6 +29,7 @@ abstract class Model extends BaseModel
             $this->getTableName(),
             $this->getColumns(),
             ['deleted_at' => null] + ($value !== null ? [$column => $value] : [])
+            // $value !== null ? [$column => $value] : []
         );
     }
 
@@ -34,12 +38,13 @@ abstract class Model extends BaseModel
         return $this->has($this->getTableName(), ['id' => $id]);
     }
 
-    final public function find(int $id): ?array
+    public function find(int $id): ?array
     {
         return $this->get(
             $this->getTableName(),
             $this->getColumns(),
             ['id' => $id, 'deleted_at' => null]
+            // ['id' => $id]
         );
     }
 
@@ -59,6 +64,7 @@ abstract class Model extends BaseModel
     {
         return $this->change($id, [
             'deleted_at' => $this->raw('now()'),
+            // 'deleted_at' => $this->raw('now()'),
         ]);
     }
 }

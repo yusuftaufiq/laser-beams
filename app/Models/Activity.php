@@ -16,13 +16,16 @@ final class Activity extends Model
 {
     final public const TABLE_NAME = 'activities';
 
+    /**
+     * TODO: Remove timestamps?
+     */
     final public const COLUMNS = [
         'id',
         'email',
         'title',
-        'created_at',
-        'updated_at',
-        'deleted_at',
+        // 'created_at',
+        // 'updated_at',
+        // 'deleted_at',
     ];
 
     final public function getTableName(): string

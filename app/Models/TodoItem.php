@@ -16,15 +16,18 @@ final class TodoItem extends Model
 {
     final public const TABLE_NAME = 'todos';
 
+    /**
+     * TODO: Remove timestamps?
+     */
     final public const COLUMNS = [
         'id',
         'title',
         'activity_group_id',
         'is_active',
         'priority',
-        'created_at',
-        'updated_at',
-        'deleted_at',
+        // 'created_at',
+        // 'updated_at',
+        // 'deleted_at',
     ];
 
     final public function getTableName(): string
