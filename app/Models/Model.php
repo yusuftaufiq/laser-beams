@@ -10,7 +10,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model;
+namespace App\Models;
 
 use Simps\DB\BaseModel;
 
@@ -18,12 +18,15 @@ abstract class Model extends BaseModel
 {
     abstract public function getTableName(): string;
 
+    abstract public function getColumns(): array;
+
     public function all(mixed $value = null, string $column = null): ?array
     {
-        return $this->select($this->getTableName(), '*', array_merge(
-            ['deleted_at' => null],
-            $value !== null ? [$column => $value] : []
-        ));
+        return $this->select(
+            $this->getTableName(),
+            $this->getColumns(),
+            ['deleted_at' => null] + ($value !== null ? [$column => $value] : [])
+        );
     }
 
     public function own(int $id): bool
@@ -31,9 +34,13 @@ abstract class Model extends BaseModel
         return $this->has($this->getTableName(), ['id' => $id]);
     }
 
-    public function find(int $id): ?array
+    final public function find(int $id): ?array
     {
-        return $this->get($this->getTableName(), '*', ['id' => $id, 'deleted_at' => null]);
+        return $this->get(
+            $this->getTableName(),
+            $this->getColumns(),
+            ['id' => $id, 'deleted_at' => null]
+        );
     }
 
     public function add(array $values): int
