@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 /**
  * This file is part of Simps.
  *
@@ -8,6 +7,9 @@ declare(strict_types=1);
  * @document https://doc.simps.io
  * @license  https://github.com/simple-swoole/simps/blob/master/LICENSE
  */
+
+declare(strict_types=1);
+
 namespace App\Listens;
 
 use Simps\DB\PDO;

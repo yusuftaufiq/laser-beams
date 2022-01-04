@@ -1,6 +1,5 @@
 <?php
 
-declare(strict_types=1);
 /**
  * This file is part of Simps.
  *
@@ -9,10 +8,12 @@ declare(strict_types=1);
  * @license  https://github.com/simple-swoole/simps/blob/master/LICENSE
  */
 
+declare(strict_types=1);
+
 return [
     'mode' => SWOOLE_PROCESS,
     'http' => [
-        'ip' => '0.0.0.0',
+        'ip' => 'localhost',
         'port' => 3030,
         'sock_type' => SWOOLE_SOCK_TCP,
         'callbacks' => [
