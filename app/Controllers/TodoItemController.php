@@ -130,7 +130,6 @@ final class TodoItemController
     final public function destroy(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
-
         $todo = new TodoItem();
 
         if ($todo->own($id) === false) {
