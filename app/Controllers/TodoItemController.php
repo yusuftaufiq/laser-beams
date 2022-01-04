@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
-use App\Helpers\TodoItemValidator;
 use App\Model\TodoItem;
+use App\Validators\TodoItemValidator;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
 
