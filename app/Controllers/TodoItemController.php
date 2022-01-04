@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Helpers\StatusCodeHelper;
 use App\Models\TodoItem;
 use App\Validators\TodoItemValidator;
 use Swoole\Http\Request;
@@ -28,17 +29,15 @@ final class TodoItemController
     final public function index(Request $request, Response $response): void
     {
         $todo = new TodoItem();
-
         $id = (int) ($request->get['activity_group_id'] ?? 0);
-
         $items = match ($id) {
-            0, null => $todo->all() ?: [],
-            default => $todo->all($id, 'activity_group_id') ?: [],
+            0, null => $todo->all(),
+            default => $todo->all($id, 'activity_group_id'),
         };
 
-        $response->setHeader('Content-Type', 'application/json');
-        $response->setStatusCode(ResponseHelper::HTTP_OK);
-        $response->end(ResponseHelper::success($items));
+        $result = ResponseHelper::format('Success', 'OK', $items);
+
+        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     /**
@@ -47,30 +46,24 @@ final class TodoItemController
     final public function show(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
-
         $todo = new TodoItem();
 
-        $response->setHeader('Content-Type', 'application/json');
-
         if ($todo->own($id) === false) {
-            $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
-            $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
+            $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return;
+            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
         }
 
         $item = $todo->find($id);
 
         // Other possibility effective solution
         // if ($item === null) {
-        //     $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
-        //     $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
-
-        //     return;
+        //     # code...
         // }
 
-        $response->setStatusCode(ResponseHelper::HTTP_OK);
-        $response->end(ResponseHelper::success($item));
+        $result = ResponseHelper::format('Success', 'OK', $item);
+
+        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     /**
@@ -79,27 +72,23 @@ final class TodoItemController
     final public function store(Request $request, Response $response): void
     {
         $requestItem = json_decode($request->getContent(), true);
-
         $violation = TodoItemValidator::validateStore($requestItem);
 
-        $response->setHeader('Content-Type', 'application/json');
-
         if ($violation !== null) {
-            $response->setStatusCode(ResponseHelper::HTTP_BAD_REQUEST);
-            $response->end(ResponseHelper::badRequest($violation));
+            $result = ResponseHelper::format('Bad Request', $violation);
 
-            return;
+            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
         }
 
         $todo = new TodoItem();
-
         $id = $todo->add($requestItem);
         $item = $todo->find($id);
         // $item = array_fill_keys(TodoItem::COLUMNS, null) + $requestItem + ['id' => $id];
         $item['is_active'] = (bool) $item['is_active'];
 
-        $response->setStatusCode(ResponseHelper::HTTP_CREATED);
-        $response->end(ResponseHelper::success($item));
+        $result = ResponseHelper::format('Success', 'OK', $item);
+
+        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
     }
 
     /**
@@ -108,36 +97,29 @@ final class TodoItemController
     final public function update(Request $request, Response $response, array $data): void
     {
         $requestItem = json_decode($request->getContent(), true);
-
         $id = (int) $data['id'];
-
         $todo = new TodoItem();
 
-        $response->setHeader('Content-Type', 'application/json');
-
         if ($todo->own($id) === false) {
-            $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
-            $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
+            $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return;
+            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
         }
 
         $affectedRowsCount = $todo->change($id, $requestItem);
 
         // Other possibility effective solution
         // if ($affectedRowsCount === 0) {
-        //     $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
-        //     $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
-
-        //     return;
+        //     # code...
         // }
 
         $item = $todo->find($id);
         // $item = array_fill_keys(TodoItem::COLUMNS, null) + $requestItem;
         $item['is_active'] = (bool) $item['is_active'];
 
-        $response->setStatusCode(ResponseHelper::HTTP_OK);
-        $response->end(ResponseHelper::success($item));
+        $result = ResponseHelper::format('Success', 'OK', $item);
+
+        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
         // $affectedRowsCount = $todo->change($id, $requestItem);
     }
@@ -151,19 +133,17 @@ final class TodoItemController
 
         $todo = new TodoItem();
 
-        $response->setHeader('Content-Type', 'application/json');
-
         if ($todo->own($id) === false) {
-            $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
-            $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
+            $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return;
+            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
         }
 
         $affectedRowsCount = $todo->remove($id);
 
-        $response->setStatusCode(ResponseHelper::HTTP_OK);
-        $response->end(ResponseHelper::success((object)[]));
+        $result = ResponseHelper::format('Success', 'OK');
+
+        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
         // $affectedRowsCount = $todo->remove($id);
     }
