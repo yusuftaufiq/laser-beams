@@ -56,6 +56,14 @@ final class ActivityController
 
         $task = $activity->find($id);
 
+        // Other possibility effective solution
+        // if ($task === null) {
+        //     $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
+        //     $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
+
+        //     return;
+        // }
+
         $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success($task));
     }
@@ -82,6 +90,7 @@ final class ActivityController
 
         $id = $activity->add($requestTask);
         $task = $activity->find($id);
+        // $task = array_fill_keys(Activity::COLUMNS, null) + $requestTask + ['id' => $id];
 
         $response->setStatusCode(ResponseHelper::HTTP_CREATED);
         $response->end(ResponseHelper::success($task));
@@ -108,10 +117,22 @@ final class ActivityController
         }
 
         $affectedRowsCount = $activity->change($id, $requestTask);
+
+        // Other possibility effective solution
+        // if ($affectedRowsCount === 0) {
+        //     $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
+        //     $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
+
+        //     return;
+        // }
+
         $task = $activity->find($id);
+        // $task = array_fill_keys(Activity::COLUMNS, null) + $requestTask;
 
         $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success($task));
+
+        // $affectedRowsCount = $activity->change($id, $requestTask);
     }
 
     /**
@@ -136,5 +157,7 @@ final class ActivityController
 
         $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success((object)[]));
+
+        // $affectedRowsCount = $activity->remove($id);
     }
 }

@@ -61,6 +61,14 @@ final class TodoItemController
 
         $item = $todo->find($id);
 
+        // Other possibility effective solution
+        // if ($item === null) {
+        //     $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
+        //     $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
+
+        //     return;
+        // }
+
         $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success($item));
     }
@@ -87,6 +95,7 @@ final class TodoItemController
 
         $id = $todo->add($requestItem);
         $item = $todo->find($id);
+        // $item = array_fill_keys(TodoItem::COLUMNS, null) + $requestItem + ['id' => $id];
         $item['is_active'] = (bool) $item['is_active'];
 
         $response->setStatusCode(ResponseHelper::HTTP_CREATED);
@@ -114,11 +123,23 @@ final class TodoItemController
         }
 
         $affectedRowsCount = $todo->change($id, $requestItem);
+
+        // Other possibility effective solution
+        // if ($affectedRowsCount === 0) {
+        //     $response->setStatusCode(ResponseHelper::HTTP_NOT_FOUND);
+        //     $response->end(ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id)));
+
+        //     return;
+        // }
+
         $item = $todo->find($id);
+        // $item = array_fill_keys(TodoItem::COLUMNS, null) + $requestItem;
         $item['is_active'] = (bool) $item['is_active'];
 
         $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success($item));
+
+        // $affectedRowsCount = $todo->change($id, $requestItem);
     }
 
     /**
@@ -143,5 +164,7 @@ final class TodoItemController
 
         $response->setStatusCode(ResponseHelper::HTTP_OK);
         $response->end(ResponseHelper::success((object)[]));
+
+        // $affectedRowsCount = $todo->remove($id);
     }
 }
