@@ -15,12 +15,13 @@ namespace App\Listeners;
 use Simps\DB\PDO;
 use Simps\DB\Redis;
 use Simps\Singleton;
+use Swoole\WebSocket\Server;
 
-class Pool
+final class Pool
 {
     use Singleton;
 
-    public function workerStart($server, $workerId)
+    final public function workerStart(Server $server, int $workerId): void
     {
         $config = config('database', []);
         if (! empty($config)) {

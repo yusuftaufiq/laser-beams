@@ -12,22 +12,25 @@ declare(strict_types=1);
 
 namespace App\Events;
 
+use Swoole\Http\Request;
+use Swoole\WebSocket\Frame;
 use Swoole\WebSocket\Server;
 
-class WebSocket
+final class WebSocket
 {
-    public static function onOpen(Server $server, $request)
+    final public static function onOpen(Server $server, Request $request): void
     {
         echo "server: handshake success with fd{$request->fd}\n";
     }
 
-    public static function onMessage(Server $server, $frame)
+    final public static function onMessage(Server $server, Frame $frame): void
     {
         echo "receive from {$frame->fd}:{$frame->data},opcode:{$frame->opcode},fin:{$frame->finish}\n";
         $server->push($frame->fd, 'this is server');
     }
 
-    public static function onClose(Server $server, $fd)
+    final public static function onClose(Server $server, int $fd): void
     {
+        # code...
     }
 }
