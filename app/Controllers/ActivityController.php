@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Helpers\RedisTrait;
 use App\Helpers\ResponseHelper;
 use App\Helpers\StatusCodeHelper;
 use App\Models\Activity;
@@ -40,7 +39,7 @@ final class ActivityController
         // });
         $result = ResponseHelper::format('Success', 'OK', $activity->all());
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     /**
@@ -54,7 +53,9 @@ final class ActivityController
         if ($activity->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+
+            return;
         }
 
         $task = $activity->find($id);
@@ -79,7 +80,7 @@ final class ActivityController
 
         $result = ResponseHelper::format('Success', 'OK', $task);
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     /**
@@ -93,7 +94,9 @@ final class ActivityController
         if ($violation !== null) {
             $result = ResponseHelper::format('Bad Request', $violation);
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
+
+            return;
         }
 
         $activity = new Activity();
@@ -103,7 +106,7 @@ final class ActivityController
 
         $result = ResponseHelper::format('Success', 'OK', $task);
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
     }
 
     /**
@@ -118,7 +121,9 @@ final class ActivityController
         if ($activity->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+
+            return;
         }
 
         $affectedRowsCount = $activity->change($id, $requestTask);
@@ -133,7 +138,7 @@ final class ActivityController
 
         $result = ResponseHelper::format('Success', 'OK', $task);
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
         // $affectedRowsCount = $activity->change($id, $requestTask);
     }
@@ -149,14 +154,16 @@ final class ActivityController
         if ($activity->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+
+            return;
         }
 
         $affectedRowsCount = $activity->remove($id);
 
         $result = ResponseHelper::format('Success', 'OK');
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
         // $affectedRowsCount = $activity->remove($id);
     }

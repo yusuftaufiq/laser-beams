@@ -37,7 +37,7 @@ final class TodoItemController
 
         $result = ResponseHelper::format('Success', 'OK', $items);
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     /**
@@ -51,7 +51,9 @@ final class TodoItemController
         if ($todo->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+
+            return;
         }
 
         $item = $todo->find($id);
@@ -63,7 +65,7 @@ final class TodoItemController
 
         $result = ResponseHelper::format('Success', 'OK', $item);
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     /**
@@ -77,7 +79,9 @@ final class TodoItemController
         if ($violation !== null) {
             $result = ResponseHelper::format('Bad Request', $violation);
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
+
+            return;
         }
 
         $todo = new TodoItem();
@@ -88,7 +92,7 @@ final class TodoItemController
 
         $result = ResponseHelper::format('Success', 'OK', $item);
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
     }
 
     /**
@@ -103,7 +107,9 @@ final class TodoItemController
         if ($todo->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+
+            return;
         }
 
         $affectedRowsCount = $todo->change($id, $requestItem);
@@ -119,7 +125,7 @@ final class TodoItemController
 
         $result = ResponseHelper::format('Success', 'OK', $item);
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
         // $affectedRowsCount = $todo->change($id, $requestItem);
     }
@@ -135,14 +141,16 @@ final class TodoItemController
         if ($todo->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+
+            return;
         }
 
         $affectedRowsCount = $todo->remove($id);
 
         $result = ResponseHelper::format('Success', 'OK');
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
         // $affectedRowsCount = $todo->remove($id);
     }

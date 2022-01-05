@@ -23,6 +23,6 @@ final class IndexController
     {
         $result = ResponseHelper::format('Success', 'OK');
 
-        return ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 }
