@@ -13,7 +13,7 @@ declare(strict_types=1);
 return [
     'mode' => SWOOLE_PROCESS,
     'http' => [
-        'ip' => 'localhost',
+        'ip' => '0.0.0.0',
         'port' => 3030,
         'sock_type' => SWOOLE_SOCK_TCP,
         'callbacks' => [
