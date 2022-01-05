@@ -4,27 +4,37 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
+use Redis;
 use Simps\DB\BaseRedis;
 use Swoole\Http\Request;
 
 trait RedisTrait
 {
+    /**
+     * @var \Redis
+     */
+    protected BaseRedis $redis;
+
+    final public function setRedis(BaseRedis $baseRedis = new BaseRedis()): void
+    {
+        $this->redis = $baseRedis;
+
+        return $this;
+    }
+
     final public function cache(Request $request, \Closure $fn): mixed
     {
-        /**
-         * @var \Redis
-         */
-        $redis = new BaseRedis();
+        $this->redis ?? $this->setRedis();
 
         $key = "{$request->server['request_method']}:{$request->server['path_info']}";
-        $cache = $redis->get($key);
+        $cache = $this->redis->get($key);
 
         if ($cache !== false) {
             return $cache;
         };
 
         $result = $fn();
-        $redis->set($key, $result);
+        $this->redis->set($key, $result);
 
         return $result;
     }
