@@ -70,4 +70,11 @@ abstract class Model extends BaseModel
             default => $this->delete($this->getTableName(), ['id' => $id])->rowCount(),
         };
     }
+
+    public function nextId(): int
+    {
+        return $this->get('INFORMATION_SCHEMA.TABLES', ['auto_increment'], [
+            'table_name' => $this->getTableName(),
+        ]);
+    }
 }
