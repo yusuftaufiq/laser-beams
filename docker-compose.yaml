@@ -1,13 +1,32 @@
 version: "3.8"
 
 services:
+  mariadb:
+    image: mariadb:10.2.41-bionic
+    environment:
+      MARIADB_USER: user 
+      MARIADB_PASSWORD: password 
+      MARIADB_ROOT_PASSWORD: password 
+      MARIADB_DATABASE: devcode
+    networks:
+      - todo-app
   app:
     image: yt2951/laser-beams:latest
-    ports:
-      - 8888:9501
     working_dir: /var/www/html/laser-beams
     volumes:
       - ./:/var/www/html/laser-beams
+    networks:
+      - todo-app
+    ports:
+      - 8090:3030
     environment:
-      AUTORELOAD_PROGRAMS: "swoole"
+      AUTORELOAD_PROGRAMS: swoole
       AUTORELOAD_ANY_FILES: 1
+      MYSQL_HOST: mariadb
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_DBNAME: devcode
+networks:
+  todo-app:
+    name: todo-app
+    driver: bridge
