@@ -28,8 +28,8 @@ abstract class Model extends BaseModel
         return $this->select(
             $this->getTableName(),
             $this->getColumns(),
-            ['deleted_at' => null] + ($value !== null && $column !== null ? [$column => $value] : [])
-            // $value !== null ? [$column => $value] : []
+            // ['deleted_at' => null] + ($value !== null && $column !== null ? [$column => $value] : [])
+            $value !== null ? [$column => $value] : []
         ) ?: [];
     }
 
@@ -43,8 +43,8 @@ abstract class Model extends BaseModel
         return $this->get(
             $this->getTableName(),
             $this->getColumns(),
-            ['id' => $id, 'deleted_at' => null]
-            // ['id' => $id]
+            // ['id' => $id, 'deleted_at' => null]
+            ['id' => $id]
         ) ?: null;
     }
 
@@ -64,7 +64,6 @@ abstract class Model extends BaseModel
     {
         return $this->change($id, [
             'deleted_at' => $this->raw('now()'),
-            // 'deleted_at' => $this->raw('now()'),
         ]);
     }
 }
