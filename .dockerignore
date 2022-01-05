@@ -1,2 +1,5 @@
 # Git directory
 /.git/
+
+# Composer dependency
+/vendor/
