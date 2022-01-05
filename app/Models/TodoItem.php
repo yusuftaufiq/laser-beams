@@ -30,6 +30,11 @@ final class TodoItem extends Model
         // 'deleted_at',
     ];
 
+    final public const DEFAULT_COLUMNS_VALUE = [
+        'is_active' => 1,
+        'priority' => 'very-high',
+    ];
+
     final public function getTableName(): string
     {
         return self::TABLE_NAME;

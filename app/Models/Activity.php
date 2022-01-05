@@ -28,6 +28,10 @@ final class Activity extends Model
         // 'deleted_at',
     ];
 
+    final public const DEFAULT_COLUMNS_VALUE = [
+        'email' => null,
+    ];
+
     final public function getTableName(): string
     {
         return self::TABLE_NAME;
