@@ -7,7 +7,7 @@ RUN apt update && apt install -y --no-install-recommends inotify-tools mariadb-c
 RUN docker-php-ext-install mysqli pdo_mysql opcache
 RUN docker-php-ext-configure opcache --enable-opcache
 
-# Use this when in production mode
+# Use this while in production mode
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
 # Copy custom PHP configuration
