@@ -3,11 +3,15 @@ FROM phpswoole/swoole:4.8.5-php8.1
 # Install packages
 RUN apt update && apt install -y --no-install-recommends inotify-tools mariadb-client
 
-# Install PDO MySQL
-RUN docker-php-ext-install mysqli pdo_mysql
+# Install PDO MySQL & Opcache
+RUN docker-php-ext-install mysqli pdo_mysql opcache
+RUN docker-php-ext-configure opcache --enable-opcache
 
 # Use this when in production mode
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
+
+# Copy custom PHP configuration
+COPY docker-configs/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 
 # Override default Swoole startup server file
 COPY docker-configs/supervisor/swoole.conf /etc/supervisor/service.d/swoole.conf
