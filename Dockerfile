@@ -30,8 +30,8 @@ RUN composer install --no-dev --optimize-autoloader --no-interaction
 # Add application
 COPY . .
 
-# Expose the port PHP built-in web server is reachable on
-# EXPOSE 8888
+# Expose the port Swoole server is reachable on
+EXPOSE 3030
 
 # Starting the web server
 ENTRYPOINT [ "" ]
