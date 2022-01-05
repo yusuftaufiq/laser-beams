@@ -22,7 +22,7 @@ trait RedisTrait
         return $this;
     }
 
-    final public function cache(Request $request, \Closure $fn): mixed
+    final public function cache(Request $request, \Closure $fn, ?int $timeout = null): mixed
     {
         $this->redis ?? $this->setRedis();
 
@@ -34,7 +34,7 @@ trait RedisTrait
         };
 
         $result = $fn();
-        $this->redis->set($key, $result);
+        $this->redis->set($key, $result, $timeout);
 
         return $result;
     }
