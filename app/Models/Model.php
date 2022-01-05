@@ -14,11 +14,10 @@ namespace App\Models;
 
 use Simps\DB\BaseModel;
 
-/**
- * TODO: Remove deleted_at?
- */
 abstract class Model extends BaseModel
 {
+    public const USE_SOFT_DELETES = false;
+
     abstract public function getTableName(): string;
 
     abstract public function getColumns(): array;
@@ -28,8 +27,10 @@ abstract class Model extends BaseModel
         return $this->select(
             $this->getTableName(),
             $this->getColumns(),
-            // ['deleted_at' => null] + ($value !== null && $column !== null ? [$column => $value] : [])
-            $value !== null ? [$column => $value] : []
+            [
+                ...($value !== null ? [$column => $value] : []),
+                ...(static::USE_SOFT_DELETES ? ['deleted_at' => null] : []),
+            ],
         ) ?: [];
     }
 
@@ -43,8 +44,10 @@ abstract class Model extends BaseModel
         return $this->get(
             $this->getTableName(),
             $this->getColumns(),
-            // ['id' => $id, 'deleted_at' => null]
-            ['id' => $id]
+            [
+                'id' => $id,
+                ...(static::USE_SOFT_DELETES ? ['deleted_at' => null] : []),
+            ],
         ) ?: null;
     }
 
@@ -62,8 +65,9 @@ abstract class Model extends BaseModel
 
     public function remove(int $id): int
     {
-        return $this->change($id, [
-            'deleted_at' => $this->raw('now()'),
-        ]);
+        return match (static::USE_SOFT_DELETES) {
+            true => $this->change($id, ['deleted_at' => $this->raw('now()')]),
+            default => $this->delete($this->getTableName(), ['id' => $id])->rowCount(),
+        };
     }
 }
