@@ -1,7 +1,7 @@
 FROM phpswoole/swoole:4.8.5-php8.1
 
 # Install packages
-RUN apt update && apt install -y inotify-tools --no-install-recommends
+RUN apt update && apt install -y --no-install-recommends inotify-tools mariadb-client
 
 # Install PDO MySQL
 RUN docker-php-ext-install mysqli pdo_mysql
@@ -26,4 +26,7 @@ COPY . .
 # EXPOSE 8888
 
 # Starting the web server
-# CMD php skeleton/bin/simps.php http:start
+ENTRYPOINT [ "" ]
+CMD ./docker-configs/wait-for-it.sh $MYSQL_HOST:3306 && \
+    mysql -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" -h "$MYSQL_HOST" -P 3306 -D "$MYSQL_DBNAME" < ./migrations/20220104105418_create_todos_activities_table.sql && \
+    /entrypoint.sh
