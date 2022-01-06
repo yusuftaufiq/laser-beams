@@ -83,7 +83,15 @@ final class TodoItemController
         $requestItem = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
 
-        $affectedRowsCount = $this->todo->change($id, $requestItem);
+        $affectedRowsCount = 0;
+
+        $this->todo->action(function () use ($id, $requestItem, $affectedRowsCount) {
+            $affectedRowsCount = $this->todo->change($id, $requestItem);
+
+            if ($affectedRowsCount === 0) {
+                return false;
+            };
+        });
 
         if ($affectedRowsCount === 0) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
