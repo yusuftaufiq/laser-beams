@@ -15,7 +15,7 @@ namespace App\Listeners;
 use Simps\DB\PDO;
 use Simps\DB\Redis;
 use Simps\Singleton;
-use Swoole\WebSocket\Server;
+use Swoole\Http\Server;
 
 final class Pool
 {
