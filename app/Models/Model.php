@@ -73,8 +73,17 @@ abstract class Model extends BaseModel
 
     public function nextId(): int
     {
-        return $this->get('INFORMATION_SCHEMA.TABLES', ['auto_increment'], [
-            'table_name' => $this->getTableName(),
-        ]);
+        return (int) $this->query(
+            'SELECT
+                <auto_increment>
+            FROM
+                <information_schema>.<tables>
+            WHERE
+                <table_name> = :table_name',
+            [
+                ':table_name' => $this->getTableName(),
+            ]
+        )->fetch(\PDO::FETCH_OBJ)
+        ?->auto_increment;
     }
 }
