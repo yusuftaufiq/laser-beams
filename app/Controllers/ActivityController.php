@@ -76,15 +76,7 @@ final class ActivityController
         $requestTask = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
 
-        $affectedRowsCount = 0;
-
-        $this->todo->action(function () use ($id, $requestTask, $affectedRowsCount) {
-            $affectedRowsCount = $this->activity->change($id, $requestTask);
-
-            if ($affectedRowsCount === 0) {
-                return false;
-            };
-        });
+        $affectedRowsCount = $this->activity->action(fn () => $this->activity->change($id, $requestTask) ?: false);
 
         if ($affectedRowsCount === 0) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
