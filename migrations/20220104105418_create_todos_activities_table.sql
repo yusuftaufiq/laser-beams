@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `activities` (
   `id` int NOT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `title` varchar(255) NOT NULL,
+  `title` varchar(255) NOT NULL
   -- `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   -- `deleted_at` timestamp NULL DEFAULT NULL
@@ -47,7 +47,7 @@ CREATE TABLE `todos` (
   `activity_group_id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  `priority` enum('very-low','low','high','very-high') NOT NULL DEFAULT 'very-high',
+  `priority` enum('very-low','low','high','very-high') NOT NULL DEFAULT 'very-high'
   -- `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   -- `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   -- `deleted_at` timestamp NULL DEFAULT NULL
