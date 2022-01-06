@@ -24,7 +24,7 @@ RUN mkdir -p /var/www/html/laser-beams
 WORKDIR /var/www/html/laser-beams
 
 # Install composer dependencies
-COPY composer.json composer.lock ./
+COPY composer.json ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction
 
 # Add application
