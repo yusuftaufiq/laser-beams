@@ -22,34 +22,30 @@ use Swoole\Http\Response;
 
 final class ActivityController
 {
-    use RedisTrait;
-
     final public const NOT_FOUND_MESSAGE = 'Activity with ID %d Not Found';
 
     final public function index(Request $request, Response $response): void
     {
-        $result = $this->cache($request, function () {
-            $activity = new Activity();
+        $activity = new Activity();
 
-            return ResponseHelper::format('Success', 'OK', $activity->all());
-        });
+        $result = ResponseHelper::format('Success', 'OK', $activity->all());
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     final public function show(Request $request, Response $response, array $data): void
     {
-        $result = $this->cache($request, function () use ($data) {
-            $id = (int) $data['id'];
-            $activity = new Activity();
-            $task = $activity->find($id);
+        $id = (int) $data['id'];
+        $activity = new Activity();
+        $task = $activity->find($id);
 
-            if ($task === null) {
-                return ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
-            }
+        if ($task === null) {
+            ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::format('Success', 'OK', $task);
-        });
+            return;
+        }
+
+        $result = ResponseHelper::format('Success', 'OK', $task);
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }

@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Helpers\RedisTrait;
 use App\Helpers\ResponseHelper;
 use App\Helpers\StatusCodeHelper;
 use App\Models\TodoItem;
@@ -22,39 +21,35 @@ use Swoole\Http\Response;
 
 final class TodoItemController
 {
-    use RedisTrait;
-
     final public const NOT_FOUND_MESSAGE = 'Todo with ID %d Not Found';
 
     final public function index(Request $request, Response $response): void
     {
-        $result = $this->cache($request, function () use ($request) {
-            $todo = new TodoItem();
-            $id = (int) ($request->get['activity_group_id'] ?? 0);
-            $items = match ($id) {
-                0, null => $todo->all(),
-                default => $todo->all($id, 'activity_group_id'),
-            };
+        $todo = new TodoItem();
+        $id = (int) ($request->get['activity_group_id'] ?? 0);
+        $items = match ($id) {
+            0, null => $todo->all(),
+            default => $todo->all($id, 'activity_group_id'),
+        };
 
-            return ResponseHelper::format('Success', 'OK', $items);
-        });
+        $result = ResponseHelper::format('Success', 'OK', $items);
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     final public function show(Request $request, Response $response, array $data): void
     {
-        $result = $this->cache($request, function () use ($data) {
-            $id = (int) $data['id'];
-            $todo = new TodoItem();
-            $item = $todo->find($id);
+        $id = (int) $data['id'];
+        $todo = new TodoItem();
+        $item = $todo->find($id);
 
-            if ($item === null) {
-                return ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
-            }
+        if ($item === null) {
+            ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
-            return ResponseHelper::format('Success', 'OK', $item);
-        });
+            return;
+        }
+
+        $result =  ResponseHelper::format('Success', 'OK', $item);
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
