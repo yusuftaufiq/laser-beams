@@ -15,7 +15,7 @@ trait RedisTrait
      */
     protected BaseRedis $redis;
 
-    final public function setRedis(BaseRedis $baseRedis = new BaseRedis()): void
+    final public function setRedis(BaseRedis $baseRedis = new BaseRedis()): self
     {
         $this->redis = $baseRedis;
 
