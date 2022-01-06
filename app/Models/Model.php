@@ -79,7 +79,8 @@ abstract class Model extends BaseModel
             FROM
                 <information_schema>.<tables>
             WHERE
-                <table_name> = :table_name',
+                <table_name> = :table_name
+            LIMIT 1',
             [
                 ':table_name' => $this->getTableName(),
             ]
