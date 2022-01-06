@@ -40,10 +40,15 @@ final class ActivityController
         $id = (int) $data['id'];
         $task = $this->activity->find($id);
 
-        $result = match ($task) {
-            null => ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id)),
-            default => ResponseHelper::format('Success', 'OK', $task),
-        };
+        if ($task === null) {
+            $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
+
+            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+
+            return;
+        }
+
+        $result = ResponseHelper::format('Success', 'OK', $task);
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
@@ -76,7 +81,7 @@ final class ActivityController
         $requestTask = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
 
-        $affectedRowsCount = $this->activity->action(fn () => $this->activity->change($id, $requestTask) ?: false);
+        $affectedRowsCount = $this->activity->action(fn () => $this->activity->change($id, $requestTask) ?: false) ?: 0;
 
         if ($affectedRowsCount === 0) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));

@@ -58,7 +58,7 @@ abstract class Model extends BaseModel
 
     public function change(int $id, array $values): int
     {
-        return $this->update($this->getTableName(), $values, [
+        return (int) $this->update($this->getTableName(), $values, [
             'id' => $id,
         ])->rowCount();
     }
