@@ -16,7 +16,7 @@ final class ResponseHelper
     final public static function format(
         string $status,
         string $message,
-        mixed $data = new \stdClass(),
+        object|array $data = new \stdClass(),
     ): string {
         return json_encode([
             'status' => $status,

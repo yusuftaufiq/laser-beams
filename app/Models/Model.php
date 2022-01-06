@@ -22,13 +22,13 @@ abstract class Model extends BaseModel
 
     abstract public function getColumns(): array;
 
-    public function all(mixed $value = null, string $column = null): array
+    public function all(null|string|int|bool $value = null, string $column = null): array
     {
         return $this->select(
             $this->getTableName(),
             $this->getColumns(),
             [
-                ...($value !== null ? [$column => $value] : []),
+                ...($value !== null && $column !== null ? [$column => $value] : []),
                 ...(static::USE_SOFT_DELETES ? ['deleted_at' => null] : []),
             ],
         ) ?: [];
