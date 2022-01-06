@@ -12,7 +12,6 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Helpers\RedisTrait;
 use App\Helpers\ResponseHelper;
 use App\Helpers\StatusCodeHelper;
 use App\Models\Activity;
@@ -24,11 +23,14 @@ final class ActivityController
 {
     final public const NOT_FOUND_MESSAGE = 'Activity with ID %d Not Found';
 
+    final public function __construct(
+        public readonly Activity $activity = new Activity(),
+    ) {
+    }
+
     final public function index(Request $request, Response $response): void
     {
-        $activity = new Activity();
-
-        $result = ResponseHelper::format('Success', 'OK', $activity->all());
+        $result = ResponseHelper::format('Success', 'OK', $this->activity->all());
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
@@ -36,23 +38,19 @@ final class ActivityController
     final public function show(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
-        $activity = new Activity();
-        $task = $activity->find($id);
+        $task = $this->activity->find($id);
 
-        if ($task === null) {
-            ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
-
-            return;
-        }
-
-        $result = ResponseHelper::format('Success', 'OK', $task);
+        $result = match ($task) {
+            null => ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id)),
+            default => ResponseHelper::format('Success', 'OK', $task),
+        };
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     final public function store(Request $request, Response $response): void
     {
-        $requestTask = json_decode($request->getContent(), true);
+        $requestTask = json_decode($request->getContent(), associative: true);
         $violation = ActivityValidator::validateStore($requestTask);
 
         if ($violation !== null) {
@@ -63,25 +61,22 @@ final class ActivityController
             return;
         }
 
-        $activity = new Activity();
-        $id = $activity->nextId();
+        $id = $this->activity->nextId();
         $task = [...Activity::DEFAULT_COLUMNS_VALUE, ...$requestTask, ...['id' => $id]];
 
         $result = ResponseHelper::format('Success', 'OK', $task);
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
 
-        $activity->add($requestTask);
+        $this->activity->add($requestTask);
     }
 
     final public function update(Request $request, Response $response, array $data): void
     {
-        $requestTask = json_decode($request->getContent(), true);
-
+        $requestTask = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
-        $activity = new Activity();
 
-        $affectedRowsCount = $activity->change($id, $requestTask);
+        $affectedRowsCount = $this->activity->change($id, $requestTask);
 
         if ($affectedRowsCount === 0) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
@@ -91,7 +86,7 @@ final class ActivityController
             return;
         }
 
-        $task = $activity->find($id);
+        $task = $this->activity->find($id);
 
         $result = ResponseHelper::format('Success', 'OK', $task);
 
@@ -101,9 +96,8 @@ final class ActivityController
     final public function destroy(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
-        $activity = new Activity();
 
-        if ($activity->own($id) === false) {
+        if ($this->activity->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
             ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
@@ -115,6 +109,6 @@ final class ActivityController
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
-        $activity->remove($id);
+        $this->activity->remove($id);
     }
 }

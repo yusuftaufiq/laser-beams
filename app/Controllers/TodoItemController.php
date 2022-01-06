@@ -23,13 +23,17 @@ final class TodoItemController
 {
     final public const NOT_FOUND_MESSAGE = 'Todo with ID %d Not Found';
 
+    final public function __construct(
+        public readonly TodoItem $todo = new TodoItem(),
+    ) {
+    }
+
     final public function index(Request $request, Response $response): void
     {
-        $todo = new TodoItem();
         $id = (int) ($request->get['activity_group_id'] ?? 0);
         $items = match ($id) {
-            0, null => $todo->all(),
-            default => $todo->all($id, 'activity_group_id'),
+            0, null => $this->todo->all(),
+            default => $this->todo->all($id, 'activity_group_id'),
         };
 
         $result = ResponseHelper::format('Success', 'OK', $items);
@@ -40,23 +44,19 @@ final class TodoItemController
     final public function show(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
-        $todo = new TodoItem();
-        $item = $todo->find($id);
+        $item = $this->todo->find($id);
 
-        if ($item === null) {
-            ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
-
-            return;
-        }
-
-        $result =  ResponseHelper::format('Success', 'OK', $item);
+        $result = match ($item) {
+            null => ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id)),
+            default => ResponseHelper::format('Success', 'OK', $item),
+        };
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
     }
 
     final public function store(Request $request, Response $response): void
     {
-        $requestItem = json_decode($request->getContent(), true);
+        $requestItem = json_decode($request->getContent(), associative: true);
         $violation = TodoItemValidator::validateStore($requestItem);
 
         if ($violation !== null) {
@@ -67,8 +67,7 @@ final class TodoItemController
             return;
         }
 
-        $todo = new TodoItem();
-        $id = $todo->nextId();
+        $id = $this->todo->nextId();
         $item = [...TodoItem::DEFAULT_COLUMNS_VALUE, ...$requestItem, ...['id' => $id]];
         $item['is_active'] = (bool) $item['is_active'];
 
@@ -76,17 +75,15 @@ final class TodoItemController
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
 
-        $todo->add($requestItem);
+        $this->todo->add($requestItem);
     }
 
     final public function update(Request $request, Response $response, array $data): void
     {
-        $requestItem = json_decode($request->getContent(), true);
-
+        $requestItem = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
-        $todo = new TodoItem();
 
-        $affectedRowsCount = $todo->change($id, $requestItem);
+        $affectedRowsCount = $this->todo->change($id, $requestItem);
 
         if ($affectedRowsCount === 0) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
@@ -96,7 +93,7 @@ final class TodoItemController
             return;
         }
 
-        $item = $todo->find($id);
+        $item = $this->todo->find($id);
         $item['is_active'] = (bool) $item['is_active'];
 
         $result = ResponseHelper::format('Success', 'OK', $item);
@@ -107,9 +104,8 @@ final class TodoItemController
     final public function destroy(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
-        $todo = new TodoItem();
 
-        if ($todo->own($id) === false) {
+        if ($this->todo->own($id) === false) {
             $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
 
             ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
@@ -121,6 +117,6 @@ final class TodoItemController
 
         ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
 
-        $todo->remove($id);
+        $this->todo->remove($id);
     }
 }
