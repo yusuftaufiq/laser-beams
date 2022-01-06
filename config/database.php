@@ -20,5 +20,5 @@ return [
     'options' => [
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     ],
-    'size' => 64,
+    'size' => 256,
 ];
