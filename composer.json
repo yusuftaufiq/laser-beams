@@ -30,6 +30,8 @@
     "require-dev": {
         "swoole/ide-helper": "@dev",
         "vimeo/psalm": "^4.17",
-        "darkghosthunter/preloader": "^2.2"
+        "darkghosthunter/preloader": "^2.2",
+        "phpunit/phpunit": "^9.5",
+        "fakerphp/faker": "^1.17"
     }
 }
