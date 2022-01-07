@@ -16,5 +16,5 @@ return [
     'auth' => '',
     'db_index' => 0,
     'time_out' => 60,
-    'size' => 256,
+    'size' => 64,
 ];
