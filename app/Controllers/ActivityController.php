@@ -14,6 +14,7 @@ namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
 use App\Models\Activity;
+use App\Models\Model;
 use App\Validators\ActivityValidator;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -23,7 +24,7 @@ final class ActivityController
     final public const NOT_FOUND_MESSAGE = 'Activity with ID %d Not Found';
 
     final public function __construct(
-        public readonly Activity $activity = new Activity(),
+        public readonly Model $activity = new Activity(),
     ) {
     }
 

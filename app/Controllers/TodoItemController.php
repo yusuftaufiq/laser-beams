@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
+use App\Models\Model;
 use App\Models\TodoItem;
 use App\Validators\TodoItemValidator;
 use Swoole\Http\Request;
@@ -23,7 +24,7 @@ final class TodoItemController
     final public const NOT_FOUND_MESSAGE = 'Todo with ID %d Not Found';
 
     final public function __construct(
-        public readonly TodoItem $todo = new TodoItem(),
+        public readonly Model $todo = new TodoItem(),
     ) {
     }
 
