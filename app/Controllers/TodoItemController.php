@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
-use App\Helpers\StatusCodeHelper;
 use App\Models\TodoItem;
 use App\Validators\TodoItemValidator;
 use Swoole\Http\Request;
@@ -36,9 +35,7 @@ final class TodoItemController
             default => $this->todo->all($id, 'activity_group_id'),
         };
 
-        $result = ResponseHelper::format('Success', 'OK', $items);
-
-        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::success($response, $items);
     }
 
     final public function show(Request $request, Response $response, array $data): void
@@ -47,16 +44,11 @@ final class TodoItemController
         $item = $this->todo->find($id);
 
         if ($item === null) {
-            $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
-
-            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
-
+            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
             return;
         }
 
-        $result = ResponseHelper::format('Success', 'OK', $item);
-
-        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::success($response, $item);
     }
 
     final public function store(Request $request, Response $response): void
@@ -65,10 +57,7 @@ final class TodoItemController
         $violation = TodoItemValidator::validateStore($requestItem);
 
         if ($violation !== null) {
-            $result = ResponseHelper::format('Bad Request', $violation);
-
-            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
-
+            ResponseHelper::badRequest($response, $violation);
             return;
         }
 
@@ -76,9 +65,7 @@ final class TodoItemController
         $item = [...TodoItem::DEFAULT_COLUMNS_VALUE, ...$requestItem, ...['id' => $id]];
         $item['is_active'] = (bool) $item['is_active'];
 
-        $result = ResponseHelper::format('Success', 'OK', $item);
-
-        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
+        ResponseHelper::created($response, $item);
 
         $this->todo->add($requestItem);
     }
@@ -91,19 +78,14 @@ final class TodoItemController
         $affectedRowsCount = $this->todo->action(fn () => $this->todo->change($id, $requestItem) ?: false) ?: 0;
 
         if ($affectedRowsCount === 0) {
-            $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
-
-            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
-
+            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
             return;
         }
 
         $item = $this->todo->find($id);
         $item['is_active'] = (bool) $item['is_active'];
 
-        $result = ResponseHelper::format('Success', 'OK', $item);
-
-        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::success($response, $item);
     }
 
     final public function destroy(Request $request, Response $response, array $data): void
@@ -111,16 +93,11 @@ final class TodoItemController
         $id = (int) $data['id'];
 
         if ($this->todo->own($id) === false) {
-            $result = ResponseHelper::format('Not Found', sprintf(self::NOT_FOUND_MESSAGE, $id));
-
-            ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
-
+            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
             return;
         }
 
-        $result = ResponseHelper::format('Success', 'OK');
-
-        ResponseHelper::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        ResponseHelper::success($response);
 
         $this->todo->remove($id);
     }

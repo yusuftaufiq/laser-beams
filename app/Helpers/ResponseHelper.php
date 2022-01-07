@@ -8,9 +8,37 @@ use Swoole\Http\Response;
 
 final class ResponseHelper
 {
-    public function __construct(
+    final public function __construct(
         public ?string $content = null,
     ) {
+    }
+
+    final public static function success(Response $response, object|array $data = new \stdClass()): void
+    {
+        $result = self::format('Success', 'OK', $data);
+
+        self::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+    }
+
+    final public static function created(Response $response, object|array $data = new \stdClass()): void
+    {
+        $result = self::format('Success', 'OK', $data);
+
+        self::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
+    }
+
+    final public static function badRequest(Response $response, string $message): void
+    {
+        $result = self::format('Bad Request', $message);
+
+        self::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
+    }
+
+    final public static function notFound(Response $response, string $message): void
+    {
+        $result = self::format('Not Found', $message);
+
+        self::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
     }
 
     final public static function format(
