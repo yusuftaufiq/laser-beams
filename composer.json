@@ -29,6 +29,7 @@
     },
     "require-dev": {
         "swoole/ide-helper": "@dev",
-        "vimeo/psalm": "^4.17"
+        "vimeo/psalm": "^4.17",
+        "darkghosthunter/preloader": "^2.2"
     }
 }

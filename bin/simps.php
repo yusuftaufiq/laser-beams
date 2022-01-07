@@ -15,3 +15,6 @@ require BASE_PATH . '/vendor/autoload.php';
 \Swoole\Runtime::enableCoroutine(SWOOLE_HOOK_FLAGS);
 
 Simps\Application::run();
+
+// Preload most used PHP files
+// DarkGhostHunter\Preloader\Preloader::make()->writeTo(__DIR__ . '/../docker-configs/php/preloader.php');
