@@ -12,7 +12,6 @@ services:
       - todo-app
   app:
     build: .
-    image: yt2951/laser-beams:latest
     working_dir: /var/www/html/laser-beams
     volumes:
       - ./:/var/www/html/laser-beams

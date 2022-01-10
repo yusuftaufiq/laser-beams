@@ -30,9 +30,6 @@ COPY docker-configs/php/php.ini /usr/local/etc/php/conf.d/custom.ini
 # Add application
 COPY . .
 
-# Read and execute access for everyone and also write access for the owner of the file
-RUN chmod -R 755 /var/www/html/laser-beams/docker-configs/php
-
 # Expose the port Swoole server is reachable on
 EXPOSE 3030
 

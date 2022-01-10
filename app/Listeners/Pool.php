@@ -13,7 +13,6 @@ declare(strict_types=1);
 namespace App\Listeners;
 
 use Simps\DB\PDO;
-use Simps\DB\Redis;
 use Simps\Singleton;
 use Swoole\Http\Server;
 
@@ -26,11 +25,6 @@ final class Pool
         $config = config('database', []);
         if (! empty($config)) {
             PDO::getInstance($config);
-        }
-
-        $config = config('redis', []);
-        if (! empty($config)) {
-            Redis::getInstance($config);
         }
     }
 }
