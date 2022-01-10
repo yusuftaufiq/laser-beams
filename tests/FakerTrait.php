@@ -8,12 +8,12 @@ trait FakerTrait
 {
     private \Faker\Generator $faker;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->faker = \Faker\Factory::create();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         unset($this->faker);
     }

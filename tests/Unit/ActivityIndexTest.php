@@ -18,8 +18,6 @@ class ActivityIndexTest extends TestCase
 
     public function testIndex(): void
     {
-        $this->expectNotToPerformAssertions();
-
         $expect = array_map(fn (): array => ([
             'id' => $this->faker->numberBetween(1, 100),
             'email' => $this->faker->email(),
@@ -34,7 +32,7 @@ class ActivityIndexTest extends TestCase
         $modelMock
             ->expects($this->once())
             ->method('all')
-            ->will($this->returnValue($expect));
+            ->willReturn($expect);
 
         $requestMock = $this->createMock(\Swoole\Http\Request::class);
 
@@ -49,7 +47,7 @@ class ActivityIndexTest extends TestCase
             ->with(200);
         $responseMock
             ->expects($this->once())
-            ->method('send')
+            ->method('end')
             ->with(json_encode([
                 'status' => 'Success',
                 'message' => 'OK',
