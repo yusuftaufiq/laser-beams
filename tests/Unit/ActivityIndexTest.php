@@ -54,6 +54,11 @@ class ActivityIndexTest extends TestCase
                 'data' => $expect,
             ]));
 
+        /**
+         * @var \App\Models\Model     $modelMock
+         * @var \Swoole\Http\Request  $requestMock
+         * @var \Swoole\Http\Response $responseMock
+         */
         $activity = new ActivityController($modelMock);
         $activity->index($requestMock, $responseMock);
     }
