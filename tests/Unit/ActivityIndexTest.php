@@ -16,10 +16,20 @@ class ActivityIndexTest extends TestCase
 {
     use FakerTrait;
 
+    public function setUp(): void
+    {
+        $this->setUpFaker();
+    }
+
+    public function tearDown(): void
+    {
+        $this->tearDownFaker();
+    }
+
     public function testIndex(): void
     {
         $expect = array_map(fn (): array => ([
-            'id' => $this->faker->numberBetween(1, 100),
+            'id' => $this->faker->unique()->numberBetween(1, 100),
             'email' => $this->faker->email(),
             'title' => $this->faker->realText(),
         ]), array_fill(0, $this->faker->randomDigitNotZero(), null));
