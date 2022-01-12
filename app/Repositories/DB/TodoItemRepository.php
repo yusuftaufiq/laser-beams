@@ -10,9 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Repositories\DB;
 
-final class TodoItem extends Model
+use App\Repositories\TodoItemRepositoryInterface;
+
+final class TodoItemRepository extends BaseRepository implements TodoItemRepositoryInterface
 {
     final public const TABLE_NAME = 'todos';
 

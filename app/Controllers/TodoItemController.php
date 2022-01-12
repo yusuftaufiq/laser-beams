@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
-use App\Models\Model;
-use App\Models\TodoItem;
+use App\Repositories\DB\TodoItemRepository;
+use App\Repositories\TodoItemRepositoryInterface;
 use App\Validators\TodoItemValidator;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -24,7 +24,7 @@ final class TodoItemController
     final public const NOT_FOUND_MESSAGE = 'Todo with ID %d Not Found';
 
     final public function __construct(
-        public readonly Model $todo = new TodoItem(),
+        public readonly TodoItemRepositoryInterface $todo = new TodoItemRepository(),
     ) {
     }
 
@@ -63,7 +63,7 @@ final class TodoItemController
         }
 
         $id = $this->todo->nextId();
-        $item = [...TodoItem::DEFAULT_COLUMNS_VALUE, ...$requestItem, ...['id' => $id]];
+        $item = [...TodoItemRepository::DEFAULT_COLUMNS_VALUE, ...$requestItem, ...['id' => $id]];
         $item['is_active'] = (bool) $item['is_active'];
 
         ResponseHelper::created($response, $item);
@@ -76,7 +76,7 @@ final class TodoItemController
         $requestItem = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
 
-        $affectedRowsCount = $this->todo->action(fn () => $this->todo->change($id, $requestItem) ?: false) ?: 0;
+        $affectedRowsCount = $this->todo->change($id, $requestItem);
 
         if ($affectedRowsCount === 0) {
             ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));

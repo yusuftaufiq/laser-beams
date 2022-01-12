@@ -10,9 +10,11 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Repositories\DB;
 
-final class Activity extends Model
+use App\Repositories\ActivityRepositoryInterface;
+
+final class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
     final public const TABLE_NAME = 'activities';
 

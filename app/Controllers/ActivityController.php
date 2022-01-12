@@ -13,8 +13,8 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\Helpers\ResponseHelper;
-use App\Models\Activity;
-use App\Models\Model;
+use App\Repositories\ActivityRepositoryInterface;
+use App\Repositories\DB\ActivityRepository;
 use App\Validators\ActivityValidator;
 use Swoole\Http\Request;
 use Swoole\Http\Response;
@@ -24,7 +24,7 @@ final class ActivityController
     final public const NOT_FOUND_MESSAGE = 'Activity with ID %d Not Found';
 
     final public function __construct(
-        public readonly Model $activity = new Activity(),
+        public readonly ActivityRepositoryInterface $activity = new ActivityRepository(),
     ) {
     }
 
@@ -57,7 +57,7 @@ final class ActivityController
         }
 
         $id = $this->activity->nextId();
-        $task = [...Activity::DEFAULT_COLUMNS_VALUE, ...$requestTask, ...['id' => $id]];
+        $task = [...ActivityRepository::DEFAULT_COLUMNS_VALUE, ...$requestTask, ...['id' => $id]];
 
         ResponseHelper::created($response, $task);
 
@@ -69,7 +69,7 @@ final class ActivityController
         $requestTask = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
 
-        $affectedRowsCount = $this->activity->action(fn () => $this->activity->change($id, $requestTask) ?: false) ?: 0;
+        $affectedRowsCount = $this->activity->change($id, $requestTask);
 
         if ($affectedRowsCount === 0) {
             ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));

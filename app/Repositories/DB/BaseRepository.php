@@ -10,11 +10,12 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace App\Repositories\DB;
 
+use App\Repositories\BaseRepositoryInterface;
 use Simps\DB\BaseModel;
 
-abstract class Model extends BaseModel
+abstract class BaseRepository extends BaseModel implements BaseRepositoryInterface
 {
     public const USE_SOFT_DELETES = false;
 
@@ -58,9 +59,9 @@ abstract class Model extends BaseModel
 
     public function change(int $id, array $values): int
     {
-        return (int) $this->update($this->getTableName(), $values, [
+        return $this->activity->action(fn () => (int) $this->update($this->getTableName(), $values, [
             'id' => $id,
-        ])->rowCount();
+        ])->rowCount() ?: false) ?: 0;
     }
 
     public function remove(int $id): int
