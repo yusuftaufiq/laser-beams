@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Tests\Controllers;
 
 use App\Controllers\ActivityController;
-use App\Models\Model;
+use App\Repositories\ActivityRepositoryInterface;
 use PHPUnit\Framework\TestCase;
+use Tests\ActivityTrait;
 use Tests\FakerTrait;
 
 /**
@@ -14,6 +15,7 @@ use Tests\FakerTrait;
  */
 class ActivityIndexTest extends TestCase
 {
+    use ActivityTrait;
     use FakerTrait;
 
     public function setUp(): void
@@ -26,20 +28,16 @@ class ActivityIndexTest extends TestCase
         $this->tearDownFaker();
     }
 
-    public function testIndex(): void
+    public function testShowAllActivities(): void
     {
-        $expect = array_map(fn (): array => ([
-            'id' => $this->faker->unique()->numberBetween(1, 100),
-            'email' => $this->faker->email(),
-            'title' => $this->faker->realText(),
-        ]), array_fill(0, $this->faker->randomDigitNotZero(), null));
+        $expect = $this->generateActivities(count: $this->faker->randomDigitNotZero());
 
-        $modelMock = $this
-            ->getMockBuilder(Model::class)
+        $activityRepositoryMock = $this
+            ->getMockBuilder(ActivityRepositoryInterface::class)
             ->onlyMethods(['all'])
             ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $modelMock
+            ->getMock();
+        $activityRepositoryMock
             ->expects($this->once())
             ->method('all')
             ->willReturn($expect);
@@ -65,11 +63,11 @@ class ActivityIndexTest extends TestCase
             ]));
 
         /**
-         * @var \App\Models\Model     $modelMock
-         * @var \Swoole\Http\Request  $requestMock
-         * @var \Swoole\Http\Response $responseMock
+         * @var \App\Repositories\ActivityRepositoryInterface $activityRepositoryMock
+         * @var \Swoole\Http\Request                          $requestMock
+         * @var \Swoole\Http\Response                         $responseMock
          */
-        $activity = new ActivityController($modelMock);
+        $activity = new ActivityController($activityRepositoryMock);
         $activity->index($requestMock, $responseMock);
     }
 }
