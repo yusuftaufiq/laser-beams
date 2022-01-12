@@ -4,52 +4,67 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
+use Phpro\ApiProblem\Http\BadRequestProblem;
+use Phpro\ApiProblem\Http\NotFoundProblem;
 use Swoole\Http\Response;
 
 final class ResponseHelper
 {
     final public function __construct(
         public ?string $content = null,
+        public ?int $statusCode = null,
     ) {
     }
 
-    final public static function success(Response $response, object|array $data = new \stdClass()): void
+    final public static function success(Response $response, string $message, array $data): void
     {
-        $result = self::format('Success', 'OK', $data);
+        $result = self::format(StatusCodeHelper::HTTP_OK, title: 'OK', detail: $message, data: $data);
 
-        self::setContent($result)->send($response, StatusCodeHelper::HTTP_OK);
+        self::setContent($result)
+            ->setStatusCode(StatusCodeHelper::HTTP_OK)
+            ->send($response);
     }
 
-    final public static function created(Response $response, object|array $data = new \stdClass()): void
+    final public static function created(Response $response, string $message, array $data): void
     {
-        $result = self::format('Success', 'OK', $data);
+        $result = self::format(StatusCodeHelper::HTTP_CREATED, title: 'Created', detail: $message, data: $data);
 
-        self::setContent($result)->send($response, StatusCodeHelper::HTTP_CREATED);
+        self::setContent($result)
+            ->setStatusCode(StatusCodeHelper::HTTP_CREATED)
+            ->send($response);
     }
 
     final public static function badRequest(Response $response, string $message): void
     {
-        $result = self::format('Bad Request', $message);
+        $result = new BadRequestProblem($message);
 
-        self::setContent($result)->send($response, StatusCodeHelper::HTTP_BAD_REQUEST);
+        self::setContent(json_encode($result->toArray()))
+            ->setStatusCode(StatusCodeHelper::HTTP_BAD_REQUEST)
+            ->send($response);
     }
 
     final public static function notFound(Response $response, string $message): void
     {
-        $result = self::format('Not Found', $message);
+        $result = new NotFoundProblem($message);
 
-        self::setContent($result)->send($response, StatusCodeHelper::HTTP_NOT_FOUND);
+        self::setContent(json_encode($result->toArray()))
+            ->setStatusCode(StatusCodeHelper::HTTP_NOT_FOUND)
+            ->send($response);
     }
 
     final public static function format(
-        string $status,
-        string $message,
-        object|array $data = new \stdClass(),
+        int $status,
+        string $title,
+        string $detail,
+        string $type = 'about:blank',
+        array $data = [],
     ): string {
         return json_encode([
             'status' => $status,
-            'message' => $message,
-            'data' => $data,
+            'type' => $type,
+            'title' => $title,
+            'detail' => $detail,
+            ...$data,
         ]);
     }
 
@@ -58,10 +73,15 @@ final class ResponseHelper
         return new self($content);
     }
 
-    final public function send(Response $response, int $statusCode): void
+    final public function setStatusCode(int $statusCode): self
+    {
+        return new self($this->content, $statusCode);
+    }
+
+    final public function send(Response $response): void
     {
         $response->setHeader('Content-Type', 'application/json');
-        $response->setStatusCode($statusCode);
+        $response->setStatusCode($this->statusCode);
         $response->end($this->content);
     }
 }

@@ -14,7 +14,8 @@
         "php": ">=7.1",
         "ext-swoole": ">=4.4",
         "simple-swoole/simps": "~1.0.0",
-        "simple-swoole/db": "~1.0.0"
+        "simple-swoole/db": "~1.0.0",
+        "phpro/api-problem": "^1.5"
     },
     "autoload": {
         "psr-4": {
