@@ -30,26 +30,30 @@ final class ActivityController
 
     final public function index(Request $request, Response $response): void
     {
-        ResponseHelper::success($response, $this->activity->all());
+        $activities = $this->activity->all();
+
+        ResponseHelper::success(message: 'Successfully retrieve activities', data: compact('activities'))
+            ->send($response);
     }
 
     final public function show(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
-        $task = $this->activity->find($id);
+        $activity = $this->activity->find($id);
 
-        if ($task === null) {
+        if ($activity === null) {
             ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
             return;
         }
 
-        ResponseHelper::success($response, $task);
+        ResponseHelper::success(message: 'Successfully retrieve activity', data: compact('activity'))
+            ->send($response);
     }
 
     final public function store(Request $request, Response $response): void
     {
-        $requestTask = json_decode($request->getContent(), associative: true);
-        $violation = ActivityValidator::validateStore($requestTask);
+        $requestActivity = json_decode($request->getContent(), associative: true);
+        $violation = ActivityValidator::validateStore($requestActivity);
 
         if ($violation !== null) {
             ResponseHelper::badRequest($response, $violation);
@@ -57,28 +61,30 @@ final class ActivityController
         }
 
         $id = $this->activity->nextId();
-        $task = [...ActivityRepository::DEFAULT_COLUMNS_VALUE, ...$requestTask, ...['id' => $id]];
+        $activity = [...ActivityRepository::DEFAULT_COLUMNS_VALUE, ...$requestActivity, ...compact('id')];
 
-        ResponseHelper::created($response, $task);
+        ResponseHelper::success(message: 'Successfully created activity', data: compact('activity'))
+            ->send($response);
 
-        $this->activity->add($requestTask);
+        $this->activity->add($requestActivity);
     }
 
     final public function update(Request $request, Response $response, array $data): void
     {
-        $requestTask = json_decode($request->getContent(), associative: true);
+        $requestActivity = json_decode($request->getContent(), associative: true);
         $id = (int) $data['id'];
 
-        $affectedRowsCount = $this->activity->change($id, $requestTask);
+        $affectedRowsCount = $this->activity->change($id, $requestActivity);
 
         if ($affectedRowsCount === 0) {
             ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
             return;
         }
 
-        $task = $this->activity->find($id);
+        $activity = $this->activity->find($id);
 
-        ResponseHelper::success($response, $task);
+        ResponseHelper::success(message: 'Successfully updated activity', data: compact('activity'))
+            ->send($response);
     }
 
     final public function destroy(Request $request, Response $response, array $data): void
@@ -90,7 +96,7 @@ final class ActivityController
             return;
         }
 
-        ResponseHelper::success($response);
+        ResponseHelper::success(message: 'Successfully deleted activity')->send($response);
 
         $this->activity->remove($id);
     }

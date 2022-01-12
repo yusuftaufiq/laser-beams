@@ -36,7 +36,11 @@ final class TodoItemController
             default => $this->todo->all($id, 'activity_group_id'),
         };
 
-        ResponseHelper::success($response, $items);
+        ResponseHelper::success(
+            $response,
+            message: 'Successfully retrieve todo items',
+            data: ['todo_items' => $items],
+        );
     }
 
     final public function show(Request $request, Response $response, array $data): void
@@ -49,7 +53,11 @@ final class TodoItemController
             return;
         }
 
-        ResponseHelper::success($response, $item);
+        ResponseHelper::success(
+            $response,
+            message: 'Successfully retrieve todo item',
+            data: ['todo_item' => $item],
+        );
     }
 
     final public function store(Request $request, Response $response): void
@@ -66,7 +74,11 @@ final class TodoItemController
         $item = [...TodoItemRepository::DEFAULT_COLUMNS_VALUE, ...$requestItem, ...['id' => $id]];
         $item['is_active'] = (bool) $item['is_active'];
 
-        ResponseHelper::created($response, $item);
+        ResponseHelper::success(
+            $response,
+            message: 'Successfully created todo item',
+            data: ['todo_item' => $item],
+        );
 
         $this->todo->add($requestItem);
     }
@@ -86,7 +98,11 @@ final class TodoItemController
         $item = $this->todo->find($id);
         $item['is_active'] = (bool) $item['is_active'];
 
-        ResponseHelper::success($response, $item);
+        ResponseHelper::success(
+            $response,
+            message: 'Successfully updated todo item',
+            data: ['todo_item' => $item],
+        );
     }
 
     final public function destroy(Request $request, Response $response, array $data): void
@@ -98,7 +114,10 @@ final class TodoItemController
             return;
         }
 
-        ResponseHelper::success($response);
+        ResponseHelper::success(
+            $response,
+            message: 'Successfully deleted todo item',
+        );
 
         $this->todo->remove($id);
     }

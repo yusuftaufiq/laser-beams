@@ -16,16 +16,14 @@ final class ResponseHelper
     ) {
     }
 
-    final public static function success(Response $response, string $message, array $data): void
+    final public static function success(string $message, array $data = []): self
     {
         $result = self::format(StatusCodeHelper::HTTP_OK, title: 'OK', detail: $message, data: $data);
 
-        self::setContent($result)
-            ->setStatusCode(StatusCodeHelper::HTTP_OK)
-            ->send($response);
+        return self::setContent($result)->setStatusCode(StatusCodeHelper::HTTP_OK);
     }
 
-    final public static function created(Response $response, string $message, array $data): void
+    final public static function created(Response $response, string $message, array $data = []): void
     {
         $result = self::format(StatusCodeHelper::HTTP_CREATED, title: 'Created', detail: $message, data: $data);
 
@@ -59,13 +57,12 @@ final class ResponseHelper
         string $type = 'about:blank',
         array $data = [],
     ): string {
-        return json_encode([
+        return json_encode(array_merge([
             'status' => $status,
             'type' => $type,
             'title' => $title,
             'detail' => $detail,
-            ...$data,
-        ]);
+        ], $data));
     }
 
     final public static function setContent(?string $content = null): self
