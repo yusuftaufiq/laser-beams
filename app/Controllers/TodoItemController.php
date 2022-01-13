@@ -36,11 +36,8 @@ final class TodoItemController
             default => $this->todo->all($id, 'activity_group_id'),
         };
 
-        ResponseHelper::success(
-            $response,
-            message: 'Successfully retrieve todo items',
-            data: ['todo_items' => $items],
-        );
+        ResponseHelper::success(message: 'Successfully retrieve todo items', data: ['items' => $items])
+            ->send($response);
     }
 
     final public function show(Request $request, Response $response, array $data): void
@@ -49,15 +46,12 @@ final class TodoItemController
         $item = $this->todo->find($id);
 
         if ($item === null) {
-            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
+            ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id))->send($response);
             return;
         }
 
-        ResponseHelper::success(
-            $response,
-            message: 'Successfully retrieve todo item',
-            data: ['todo_item' => $item],
-        );
+        ResponseHelper::success(message: 'Successfully retrieve todo item', data: ['item' => $item])
+            ->send($response);
     }
 
     final public function store(Request $request, Response $response): void
@@ -66,7 +60,7 @@ final class TodoItemController
         $violation = TodoItemValidator::validateStore($requestItem);
 
         if ($violation !== null) {
-            ResponseHelper::badRequest($response, $violation);
+            ResponseHelper::badRequest($violation)->send($response);
             return;
         }
 
@@ -74,11 +68,8 @@ final class TodoItemController
         $item = [...TodoItemRepository::DEFAULT_COLUMNS_VALUE, ...$requestItem, ...['id' => $id]];
         $item['is_active'] = (bool) $item['is_active'];
 
-        ResponseHelper::success(
-            $response,
-            message: 'Successfully created todo item',
-            data: ['todo_item' => $item],
-        );
+        ResponseHelper::success(message: 'Successfully created todo item', data: ['item' => $item])
+            ->send($response);
 
         $this->todo->add($requestItem);
     }
@@ -91,18 +82,15 @@ final class TodoItemController
         $affectedRowsCount = $this->todo->change($id, $requestItem);
 
         if ($affectedRowsCount === 0) {
-            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
+            ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id))->send($response);
             return;
         }
 
         $item = $this->todo->find($id);
         $item['is_active'] = (bool) $item['is_active'];
 
-        ResponseHelper::success(
-            $response,
-            message: 'Successfully updated todo item',
-            data: ['todo_item' => $item],
-        );
+        ResponseHelper::success(message: 'Successfully updated todo item', data: ['item' => $item])
+            ->send(($response));
     }
 
     final public function destroy(Request $request, Response $response, array $data): void
@@ -110,14 +98,11 @@ final class TodoItemController
         $id = (int) $data['id'];
 
         if ($this->todo->own($id) === false) {
-            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
+            ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id))->send($response);
             return;
         }
 
-        ResponseHelper::success(
-            $response,
-            message: 'Successfully deleted todo item',
-        );
+        ResponseHelper::success(message: 'Successfully deleted todo item')->send($response);
 
         $this->todo->remove($id);
     }
