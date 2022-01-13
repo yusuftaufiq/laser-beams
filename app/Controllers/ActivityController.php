@@ -32,7 +32,7 @@ final class ActivityController
     {
         $activities = $this->activity->all();
 
-        ResponseHelper::success(message: 'Successfully retrieve activities', data: compact('activities'))
+        ResponseHelper::success(message: 'Successfully retrieve activities', data: ['activities' => $activities])
             ->send($response);
     }
 
@@ -42,11 +42,11 @@ final class ActivityController
         $activity = $this->activity->find($id);
 
         if ($activity === null) {
-            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
+            ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id))->send($response);
             return;
         }
 
-        ResponseHelper::success(message: 'Successfully retrieve activity', data: compact('activity'))
+        ResponseHelper::success(message: 'Successfully retrieve activity', data: ['activity' => $activity])
             ->send($response);
     }
 
@@ -56,14 +56,14 @@ final class ActivityController
         $violation = ActivityValidator::validateStore($requestActivity);
 
         if ($violation !== null) {
-            ResponseHelper::badRequest($response, $violation);
+            ResponseHelper::badRequest($violation)->send($response);
             return;
         }
 
         $id = $this->activity->nextId();
-        $activity = [...ActivityRepository::DEFAULT_COLUMNS_VALUE, ...$requestActivity, ...compact('id')];
+        $activity = [...ActivityRepository::DEFAULT_COLUMNS_VALUE, ...$requestActivity, ...['id' => $id]];
 
-        ResponseHelper::success(message: 'Successfully created activity', data: compact('activity'))
+        ResponseHelper::success(message: 'Successfully created activity', data: ['activity' => $activity])
             ->send($response);
 
         $this->activity->add($requestActivity);
@@ -77,13 +77,13 @@ final class ActivityController
         $affectedRowsCount = $this->activity->change($id, $requestActivity);
 
         if ($affectedRowsCount === 0) {
-            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
+            ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id))->send($response);
             return;
         }
 
         $activity = $this->activity->find($id);
 
-        ResponseHelper::success(message: 'Successfully updated activity', data: compact('activity'))
+        ResponseHelper::success(message: 'Successfully updated activity', data: ['activity' => $activity])
             ->send($response);
     }
 
@@ -92,7 +92,7 @@ final class ActivityController
         $id = (int) $data['id'];
 
         if ($this->activity->own($id) === false) {
-            ResponseHelper::notFound($response, sprintf(self::NOT_FOUND_MESSAGE, $id));
+            ResponseHelper::notFound(sprintf(self::NOT_FOUND_MESSAGE, $id))->send($response);
             return;
         }
 
