@@ -16,20 +16,17 @@ use App\Repositories\TodoItemRepositoryInterface;
 
 final class TodoItemRepository extends BaseRepository implements TodoItemRepositoryInterface
 {
-    final public const TABLE_NAME = 'todos';
+    final public const TABLE_NAME = 'todo_items';
 
-    /**
-     * TODO: Remove timestamps?
-     */
     final public const COLUMNS = [
         'id',
         'title',
         'activity_group_id',
         'is_active',
         'priority',
-        // 'created_at',
-        // 'updated_at',
-        // 'deleted_at',
+        'created_at',
+        'updated_at',
+        'deleted_at',
     ];
 
     final public const DEFAULT_COLUMNS_VALUE = [

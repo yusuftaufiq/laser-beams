@@ -30,27 +30,27 @@ SET time_zone = "+00:00";
 CREATE TABLE `activities` (
   `id` int NOT NULL,
   `email` varchar(255) DEFAULT NULL,
-  `title` varchar(255) NOT NULL
-  -- `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  -- `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  -- `deleted_at` timestamp NULL DEFAULT NULL
+  `title` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `todos`
+-- Table structure for table `todo_items`
 --
 
-CREATE TABLE `todos` (
+CREATE TABLE `todo_items` (
   `id` int NOT NULL,
   `activity_group_id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  `priority` enum('very-low','low','high','very-high') NOT NULL DEFAULT 'very-high'
-  -- `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  -- `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  -- `deleted_at` timestamp NULL DEFAULT NULL
+  `priority` enum('very-low','low','high','very-high') NOT NULL DEFAULT 'very-high',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 --
@@ -64,9 +64,9 @@ ALTER TABLE `activities`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `todos`
+-- Indexes for table `todo_items`
 --
-ALTER TABLE `todos`
+ALTER TABLE `todo_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `activity_group_id` (`activity_group_id`);
 
@@ -81,9 +81,9 @@ ALTER TABLE `activities`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `todos`
+-- AUTO_INCREMENT for table `todo_items`
 --
-ALTER TABLE `todos`
+ALTER TABLE `todo_items`
   MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
@@ -91,10 +91,10 @@ ALTER TABLE `todos`
 --
 
 --
--- Constraints for table `todos`
+-- Constraints for table `todo_items`
 --
-ALTER TABLE `todos`
-  ADD CONSTRAINT `todos_ibfk_1` FOREIGN KEY (`activity_group_id`) REFERENCES `activities` (`id`) ON DELETE CASCADE;
+ALTER TABLE `todo_items`
+  ADD CONSTRAINT `todo_items_ibfk_1` FOREIGN KEY (`activity_group_id`) REFERENCES `activities` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
