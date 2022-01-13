@@ -20,34 +20,28 @@ final class ResponseHelper
     {
         $result = self::format(StatusCodeHelper::HTTP_OK, title: 'OK', detail: $message, data: $data);
 
-        return self::setContent($result)->setStatusCode(StatusCodeHelper::HTTP_OK);
+        return new self(content: $result, statusCode: StatusCodeHelper::HTTP_OK);
     }
 
-    final public static function created(Response $response, string $message, array $data = []): void
+    final public static function created(string $message, array $data = []): self
     {
         $result = self::format(StatusCodeHelper::HTTP_CREATED, title: 'Created', detail: $message, data: $data);
 
-        self::setContent($result)
-            ->setStatusCode(StatusCodeHelper::HTTP_CREATED)
-            ->send($response);
+        return new self(content: $result, statusCode: StatusCodeHelper::HTTP_CREATED);
     }
 
-    final public static function badRequest(Response $response, string $message): void
+    final public static function badRequest(string $message): self
     {
         $result = new BadRequestProblem($message);
 
-        self::setContent(json_encode($result->toArray()))
-            ->setStatusCode(StatusCodeHelper::HTTP_BAD_REQUEST)
-            ->send($response);
+        return new self(content: json_encode($result->toArray()), statusCode: StatusCodeHelper::HTTP_BAD_REQUEST);
     }
 
-    final public static function notFound(Response $response, string $message): void
+    final public static function notFound(string $message): self
     {
         $result = new NotFoundProblem($message);
 
-        self::setContent(json_encode($result->toArray()))
-            ->setStatusCode(StatusCodeHelper::HTTP_NOT_FOUND)
-            ->send($response);
+        return new self(content: json_encode($result->toArray()), statusCode: StatusCodeHelper::HTTP_NOT_FOUND);
     }
 
     final public static function format(
@@ -65,20 +59,26 @@ final class ResponseHelper
         ], $data));
     }
 
-    final public static function setContent(?string $content = null): self
+    final public function setContent(?string $content = null): self
     {
-        return new self($content);
+        $this->content = $content;
+
+        return $this;
     }
 
     final public function setStatusCode(int $statusCode): self
     {
-        return new self($this->content, $statusCode);
+        $this->statusCode = $statusCode;
+
+        return $this;
     }
 
-    final public function send(Response $response): void
+    final public function send(Response $response): self
     {
         $response->setHeader('Content-Type', 'application/json');
         $response->setStatusCode($this->statusCode);
         $response->end($this->content);
+
+        return $this;
     }
 }
