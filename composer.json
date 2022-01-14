@@ -15,7 +15,8 @@
         "ext-swoole": ">=4.4",
         "simple-swoole/simps": "~1.0.0",
         "simple-swoole/db": "~1.0.0",
-        "phpro/api-problem": "^1.5"
+        "phpro/api-problem": "^1.5",
+        "symfony/validator": "^6.0"
     },
     "autoload": {
         "psr-4": {
