@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Helpers\Attributes\RouteHelper as Route;
 use App\Helpers\Http\ResponseHelper;
 use App\Repositories\DB\TodoItemRepository;
 use App\Repositories\TodoItemRepositoryInterface;
@@ -28,6 +29,7 @@ final class TodoItemController
     ) {
     }
 
+    #[Route('GET', '/todo-items')]
     final public function index(Request $request, Response $response): void
     {
         $id = (int) ($request->get['activity_group_id'] ?? 0);
@@ -40,6 +42,7 @@ final class TodoItemController
             ->send($response);
     }
 
+    #[Route('GET', '/todo-items/{id:\d+}')]
     final public function show(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
@@ -54,6 +57,7 @@ final class TodoItemController
             ->send($response);
     }
 
+    #[Route('POST', '/todo-items')]
     final public function store(Request $request, Response $response): void
     {
         $requestItem = json_decode($request->getContent(), associative: true);
@@ -74,6 +78,7 @@ final class TodoItemController
         $this->todo->add($requestItem);
     }
 
+    #[Route('PATCH', '/todo-items/{id:\d+}')]
     final public function update(Request $request, Response $response, array $data): void
     {
         $requestItem = json_decode($request->getContent(), associative: true);
@@ -93,6 +98,7 @@ final class TodoItemController
             ->send(($response));
     }
 
+    #[Route('DELETE', '/todo-items/{id:\d+}')]
     final public function destroy(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];

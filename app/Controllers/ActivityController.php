@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
+use App\Helpers\Attributes\RouteHelper as Route;
 use App\Helpers\Http\ResponseHelper;
 use App\Repositories\ActivityRepositoryInterface;
 use App\Repositories\DB\ActivityRepository;
@@ -28,6 +29,7 @@ final class ActivityController
     ) {
     }
 
+    #[Route('GET', '/activity-groups')]
     final public function index(Request $request, Response $response): void
     {
         $activities = $this->activity->all();
@@ -36,6 +38,7 @@ final class ActivityController
             ->send($response);
     }
 
+    #[Route('GET', '/activity-groups/{id:\d+}')]
     final public function show(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
@@ -50,6 +53,7 @@ final class ActivityController
             ->send($response);
     }
 
+    #[Route('POST', '/activity-groups')]
     final public function store(Request $request, Response $response): void
     {
         $requestActivity = json_decode($request->getContent(), associative: true);
@@ -69,6 +73,7 @@ final class ActivityController
         $this->activity->add($requestActivity);
     }
 
+    #[Route('PATCH', '/activity-groups/{id:\d+}')]
     final public function update(Request $request, Response $response, array $data): void
     {
         $requestActivity = json_decode($request->getContent(), associative: true);
@@ -87,6 +92,7 @@ final class ActivityController
             ->send($response);
     }
 
+    #[Route('DELETE', '/activity-groups/{id:\d+}')]
     final public function destroy(Request $request, Response $response, array $data): void
     {
         $id = (int) $data['id'];
