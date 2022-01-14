@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Http\ResponseHelper;
 use App\Repositories\ActivityRepositoryInterface;
 use App\Repositories\DB\ActivityRepository;
 use App\Validators\ActivityValidator;

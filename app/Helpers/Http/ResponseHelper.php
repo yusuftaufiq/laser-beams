@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Helpers;
+namespace App\Helpers\Http;
 
 use Phpro\ApiProblem\Http\BadRequestProblem;
 use Phpro\ApiProblem\Http\NotFoundProblem;

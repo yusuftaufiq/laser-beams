@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Helpers\ResponseHelper;
+use App\Helpers\Http\ResponseHelper;
 use App\Repositories\DB\TodoItemRepository;
 use App\Repositories\TodoItemRepositoryInterface;
 use App\Validators\TodoItemValidator;
