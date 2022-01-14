@@ -29,6 +29,13 @@ final class TodoItemRepository extends BaseRepository implements TodoItemReposit
         'deleted_at',
     ];
 
+    final public const PRIORITY = [
+        'very-low',
+        'low',
+        'high',
+        'very-high',
+    ];
+
     final public const DEFAULT_COLUMNS_VALUE = [
         'is_active' => 1,
         'priority' => 'very-high',
