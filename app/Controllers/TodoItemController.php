@@ -61,10 +61,10 @@ final class TodoItemController
     final public function store(Request $request, Response $response): void
     {
         $requestItem = json_decode($request->getContent(), associative: true);
-        $violation = TodoItemValidator::validateStore($requestItem);
+        $violations = TodoItemValidator::validate()->store($requestItem);
 
-        if ($violation !== null) {
-            ResponseHelper::badRequest($violation)->send($response);
+        if ($violations !== null) {
+            ResponseHelper::badRequest($violations)->send($response);
             return;
         }
 
@@ -82,8 +82,14 @@ final class TodoItemController
     final public function update(Request $request, Response $response, array $data): void
     {
         $requestItem = json_decode($request->getContent(), associative: true);
-        $id = (int) $data['id'];
+        $violations = TodoItemValidator::validate()->update($requestItem);
 
+        if ($violations !== null) {
+            ResponseHelper::badRequest($violations)->send($response);
+            return;
+        }
+
+        $id = (int) $data['id'];
         $affectedRowsCount = $this->todo->change($id, $requestItem);
 
         if ($affectedRowsCount === 0) {

@@ -57,10 +57,10 @@ final class ActivityController
     final public function store(Request $request, Response $response): void
     {
         $requestActivity = json_decode($request->getContent(), associative: true);
-        $violation = ActivityValidator::validateStore($requestActivity);
+        $violations = ActivityValidator::validate()->store($requestActivity);
 
-        if ($violation !== null) {
-            ResponseHelper::badRequest($violation)->send($response);
+        if ($violations !== null) {
+            ResponseHelper::badRequest($violations)->send($response);
             return;
         }
 
@@ -77,8 +77,14 @@ final class ActivityController
     final public function update(Request $request, Response $response, array $data): void
     {
         $requestActivity = json_decode($request->getContent(), associative: true);
-        $id = (int) $data['id'];
+        $violations = ActivityValidator::validate()->update($requestActivity);
 
+        if ($violations !== null) {
+            ResponseHelper::badRequest($violations)->send($response);
+            return;
+        }
+
+        $id = (int) $data['id'];
         $affectedRowsCount = $this->activity->change($id, $requestActivity);
 
         if ($affectedRowsCount === 0) {

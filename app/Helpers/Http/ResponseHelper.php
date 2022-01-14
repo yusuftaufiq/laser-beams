@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Helpers\Http;
 
-use Phpro\ApiProblem\Http\BadRequestProblem;
 use Phpro\ApiProblem\Http\NotFoundProblem;
+use Phpro\ApiProblem\Http\ValidationApiProblem;
 use Swoole\Http\Response;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
 
 final class ResponseHelper
 {
@@ -30,9 +31,9 @@ final class ResponseHelper
         return new self(content: $result, statusCode: StatusCodeHelper::HTTP_CREATED);
     }
 
-    final public static function badRequest(string $message): self
+    final public static function badRequest(ConstraintViolationListInterface $violations): self
     {
-        $result = new BadRequestProblem($message);
+        $result = new ValidationApiProblem($violations);
 
         return new self(content: json_encode($result->toArray()), statusCode: StatusCodeHelper::HTTP_BAD_REQUEST);
     }
