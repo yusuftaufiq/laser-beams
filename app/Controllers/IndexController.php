@@ -19,7 +19,7 @@ use Swoole\Http\Response;
 
 final class IndexController
 {
-    #[Route(httpMethod: 'GET', routePattern: '/')]
+    #[Route('GET', '/')]
     final public function index(Request $request, Response $response): void
     {
         ResponseHelper::success(message: 'Welcome to simple todo apps built using Swoole')
