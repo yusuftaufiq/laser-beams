@@ -12,8 +12,8 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 final class ResponseHelper
 {
     final public function __construct(
-        public ?string $content = null,
-        public ?int $statusCode = null,
+        private ?string $content = null,
+        private ?int $statusCode = null,
     ) {
     }
 

@@ -16,9 +16,11 @@ use App\Repositories\ActivityRepositoryInterface;
 
 final class ActivityRepository extends BaseRepository implements ActivityRepositoryInterface
 {
-    final public const TABLE_NAME = 'activities';
+    final protected const USE_SOFT_DELETES = true;
 
-    final public const COLUMNS = [
+    final private const TABLE_NAME = 'activities';
+
+    final private const COLUMNS = [
         'id',
         'email',
         'title',
@@ -31,12 +33,12 @@ final class ActivityRepository extends BaseRepository implements ActivityReposit
         'email' => null,
     ];
 
-    final public function getTableName(): string
+    final public static function getTableName(): string
     {
         return self::TABLE_NAME;
     }
 
-    final public function getColumns(): array
+    final public static function getColumns(): array
     {
         return self::COLUMNS;
     }

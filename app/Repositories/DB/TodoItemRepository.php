@@ -16,9 +16,11 @@ use App\Repositories\TodoItemRepositoryInterface;
 
 final class TodoItemRepository extends BaseRepository implements TodoItemRepositoryInterface
 {
-    final public const TABLE_NAME = 'todo_items';
+    final protected const USE_SOFT_DELETES = true;
 
-    final public const COLUMNS = [
+    final private const TABLE_NAME = 'todo_items';
+
+    final private const COLUMNS = [
         'id',
         'title',
         'activity_group_id',
@@ -41,12 +43,12 @@ final class TodoItemRepository extends BaseRepository implements TodoItemReposit
         'priority' => 'very-high',
     ];
 
-    final public function getTableName(): string
+    final public static function getTableName(): string
     {
         return self::TABLE_NAME;
     }
 
-    final public function getColumns(): array
+    final public static function getColumns(): array
     {
         return self::COLUMNS;
     }

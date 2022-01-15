@@ -22,10 +22,10 @@ use Swoole\Http\Response;
 
 final class ActivityController
 {
-    final public const NOT_FOUND_MESSAGE = 'Activity with ID %d Not Found';
+    final private const NOT_FOUND_MESSAGE = 'Activity with ID %d Not Found';
 
     final public function __construct(
-        public readonly ActivityRepositoryInterface $activity = new ActivityRepository(),
+        private readonly ActivityRepositoryInterface $activity = new ActivityRepository(),
     ) {
     }
 

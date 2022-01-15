@@ -22,10 +22,10 @@ use Swoole\Http\Response;
 
 final class TodoItemController
 {
-    final public const NOT_FOUND_MESSAGE = 'Todo with ID %d Not Found';
+    final private const NOT_FOUND_MESSAGE = 'Todo with ID %d Not Found';
 
     final public function __construct(
-        public readonly TodoItemRepositoryInterface $todo = new TodoItemRepository(),
+        private readonly TodoItemRepositoryInterface $todo = new TodoItemRepository(),
     ) {
     }
 
