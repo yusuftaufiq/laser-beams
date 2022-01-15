@@ -16,7 +16,7 @@ abstract class BaseValidator
     }
 
     final public function __construct(
-        private ValidatorInterface $validator,
+        protected ValidatorInterface $validator,
     ) {
         $this->validator = Validation::createValidator();
     }
