@@ -29,6 +29,6 @@ trait ActivityTrait
 
     public function generateNotFoundMessage($id): string
     {
-        return sprintf('Activity with ID %d Not Found', $id);
+        return sprintf('Activity with ID %d not found', $id);
     }
 }
