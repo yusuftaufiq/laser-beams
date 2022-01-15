@@ -9,6 +9,9 @@ use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
+/**
+ * @method static BaseValidator validate(mixed ...$args)
+ */
 abstract class BaseValidator
 {
     use SelfInstantiateHelper {
